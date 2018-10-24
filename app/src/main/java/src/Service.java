@@ -8,6 +8,8 @@ public class Service {
     private String serviceName;
     private String info;
     private boolean approved;
+    private boolean isActive;
+    private boolean isAvailable;
 
     public Service(String serviceName,String info,boolean approved){
         this.serviceName = serviceName;
@@ -29,6 +31,14 @@ public class Service {
     }
 
     public boolean removeHomeOwner(HomeOwner ho){
+        return true; //temporary
+    }
+
+    public boolean deleteService(){
+        return true; //temporary
+    }
+
+    public boolean isServiceAvailable(){
         return true; //temporary
     }
 
