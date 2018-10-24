@@ -12,15 +12,15 @@ public class HomeOwner extends User {
         this.homePhone = homePhone;
     }
 
-    public boolean selectServiceProvider(ServiceProvider sp){
+    public boolean selectService(Service s){
         return true; //temporary
     }
 
-    public boolean addServiceProvider(ServiceProvider sp){
+    public boolean addService(Service s){
         return true; //temporary
     }
 
-    public boolean deleteServiceProvider(ServiceProvider sp){
+    public boolean deleteService(Service s){
         return true; //temporary
     }
 
