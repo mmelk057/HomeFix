@@ -2,12 +2,16 @@ package src;
 
 import java.util.ArrayList;
 
-public class Admin extends Person {
-    private ArrayList<Service> services;
-    public boolean addServiceToList(Service service){
+public class Admin extends User{
+
+    public Admin(){
+
+    }
+
+    public boolean addServiceToDatabase(Service service){
         return true;
     }
-    public boolean removeServiceFromList(Service service){
+    public boolean removeServiceFromDatabase(Service service){
         return true;
     }
 }
