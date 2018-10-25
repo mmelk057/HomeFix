@@ -8,8 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,7 +43,6 @@ public class Login extends AppCompatActivity {
 
                 username = (EditText)findViewById(R.id.editText3);
                 password = (EditText)findViewById(R.id.editText4);
-                addUser();
                 Intent previousIntent = getIntent();
                 System.out.println(previousIntent.getStringExtra("type"));
                 if (previousIntent.getStringExtra("type").equals("admin")){
@@ -88,6 +87,7 @@ public class Login extends AppCompatActivity {
                         if(areEmailSectionsValid){
                             Intent toWelcome = new Intent(Login.this, Welcome.class);
                             toWelcome.putExtra("user", username.getText().toString());
+                            addUser();
                             try {
                                 startActivity(toWelcome);
                             } catch (Exception e) {

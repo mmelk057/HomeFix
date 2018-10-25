@@ -28,10 +28,7 @@ public class WelcomeAdmin extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.welcomeadmin);
         l1 = (ListView)findViewById(R.id.listView);
-        Intent previousIntent = getIntent();
-        String username = previousIntent.getStringExtra("user");
-        TextView welcomeUser =(TextView)findViewById(R.id.welcomeUser);
-        welcomeUser.setText("Welcome,"+username);
+
     }
 
 }
