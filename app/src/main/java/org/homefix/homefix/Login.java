@@ -6,10 +6,25 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 
 import java.util.regex.Pattern;
 
 public class Login extends AppCompatActivity {
+
+    DatabaseReference dr;
+    EditText username;
+    EditText password;
+    String type = "temp";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,24 +33,31 @@ public class Login extends AppCompatActivity {
 
         //Set up Login Button
         Button loginButton = (Button)findViewById(R.id.Button2);
+        dr = FirebaseDatabase.getInstance().getReference("User");
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Take the String object from the "username" textbox - make sure it's an email
                 //Take the String object from the "password" textbox - make sure it's not null
+
+                username = (EditText)findViewById(R.id.editText3);
+                password = (EditText)findViewById(R.id.editText4);
+                addUser();
                 Intent previousIntent = getIntent();
+                System.out.println(previousIntent.getStringExtra("type"));
                 if (previousIntent.getStringExtra("type").equals("admin")){
-                    //Database Verification Step Required
-                    //Admin
+                        type = "Admin";
                 }
                 else if (previousIntent.getStringExtra("type").equals("homeOwner")){
                     //Database Verification Step Required
                     //Home Owner
+                    type = "HomeOwner";
                 }
                 else{
                     //Service Provider
                     //Database Verification Step Required
+                    type = "ServiceProvider";
                 }
 
                 EditText username = (EditText)findViewById(R.id.editText3);
@@ -80,4 +102,14 @@ public class Login extends AppCompatActivity {
             }
         });
     }
+
+    private void addUser() {
+        String id = dr.push().getKey();
+        String email = username.getText().toString().trim();
+        String _password = password.getText().toString().trim();
+        User user = new User(email, _password, type);
+        dr.child("ListOfUsers").child(id).setValue(user);
+        Toast.makeText(this, "User added", Toast.LENGTH_LONG).show();
+    }
+
 }
