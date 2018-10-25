@@ -9,7 +9,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,7 +23,7 @@ public class Login extends AppCompatActivity {
     DatabaseReference dr;
     EditText username;
     EditText password;
-    String type = "temp";
+    String type = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,16 +84,27 @@ public class Login extends AppCompatActivity {
                             }
                         }
                         if(areEmailSectionsValid){
-                            Intent toWelcome = new Intent(Login.this, Welcome.class);
-                            toWelcome.putExtra("user", username.getText().toString());
-                            addUser();
-                            try {
-                                startActivity(toWelcome);
-                            } catch (Exception e) {
-                                System.out.println("Error Starting Activity: " + e.getMessage() + "\n" + e.getStackTrace());
-
+                            if (type.equals("HomeOwner") || type.equals("ServiceProvider")) {
+                                Intent toWelcomeUser = new Intent(Login.this, Welcome.class);
+                                toWelcomeUser.putExtra("user", username.getText().toString());
+                                addUser(type);
+                                try {
+                                    startActivity(toWelcomeUser);
+                                } catch (Exception e) {
+                                    System.out.println("Error Starting Activity: " + e.getMessage() + "\n" + e.getStackTrace());
+                                }
                             }
+                            else{
+                                Intent toWelcomeAdmin = new Intent(Login.this, WelcomeAdmin.class);
+                                toWelcomeAdmin.putExtra("user", username.getText().toString());
+                                addUser(type);
+                                try {
+                                    startActivity(toWelcomeAdmin);
+                                } catch (Exception e) {
+                                    System.out.println("Error Starting Activity: " + e.getMessage() + "\n" + e.getStackTrace());
 
+                                }
+                            }
                         }
                     }
                 }
@@ -103,13 +113,20 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    private void addUser() {
+    private void addUser(String type) {
+
         String id = dr.push().getKey();
         String email = username.getText().toString().trim();
         String _password = password.getText().toString().trim();
         User user = new User(email, _password, type);
-        dr.child("ListOfUsers").child(id).setValue(user);
-        Toast.makeText(this, "User added", Toast.LENGTH_LONG).show();
+        if (type.equals("HomeOwner") || type.equals("ServiceProvider")) {
+            dr.child("ListOfUsers").child(id).setValue(user);
+            Toast.makeText(this, "User added", Toast.LENGTH_LONG).show();
+        }
+        else if (type.equals("Admin")){
+            dr.child("Admin").child(id).setValue(user);
+            Toast.makeText(this, "Admin added", Toast.LENGTH_LONG).show();
+        }
     }
 
 }
