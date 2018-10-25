@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">HomeFix</string>
     <color name="beige">#fff0c7</color>
+    <string name="login">Login</string>
+    <string name="L">Login</string>
+    <string name="textview">TextView</string>
+    <string name="back">Back</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="LOGO">TODO</string>
+    <string name="todo">TODO</string>
 </resources>
