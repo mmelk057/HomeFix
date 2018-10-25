@@ -41,15 +41,20 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
         android:layout_marginStart="102dp"
         android:layout_marginLeft="102dp"
-        android:layout_marginTop="443dp"
+        android:layout_marginEnd="102dp"
+        android:layout_marginRight="102dp"
+        android:layout_marginBottom="76dp"
         android:background="#009FB7"
+        android:fontFamily="@font/x"
+        android:text="Login"
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
         tools:targetApi="lollipop"
-        tools:text="Login"
-        android:fontFamily="@font/x"/>
+        tools:text="Login" />
 
     <ImageButton
         android:id="@+id/imageButton2"
