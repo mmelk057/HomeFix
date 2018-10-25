@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">HomeFix</string>
+    <color name="beige">#fff0c7</color>
 </resources>
