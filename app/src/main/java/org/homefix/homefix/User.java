@@ -17,10 +17,21 @@ public class User { // TMP
                 indexOfAt = i;
                 break;
             }
-        this.username = email.substring(0, indexOfAt+1);
+        this.username = email.substring(0, indexOfAt);
     }
 
     public String getUsername() {
         return username;
+    }
+    public String getEmail(){
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getType(){
+        return type;
     }
 }

@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
         Button homeOwnerButton = (Button)findViewById(R.id.userRadio);
         Button spButton =(Button)findViewById(R.id.spRadio);
 
-
         adminButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

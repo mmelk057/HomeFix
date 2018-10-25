@@ -22,7 +22,7 @@ public class Login extends AppCompatActivity {
     DatabaseReference dr;
     EditText username;
     EditText password;
-    String type;
+    String type = "temp";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +31,19 @@ public class Login extends AppCompatActivity {
 
         //Set up Login Button
         Button loginButton = (Button)findViewById(R.id.Button2);
+        dr = FirebaseDatabase.getInstance().getReference("User");
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Take the String object from the "username" textbox - make sure it's an email
                 //Take the String object from the "password" textbox - make sure it's not null
+
+                username = (EditText)findViewById(R.id.editText3);
+                password = (EditText)findViewById(R.id.editText4);
+                addUser();
                 Intent previousIntent = getIntent();
+                System.out.println(previousIntent.getStringExtra("type"));
                 if (previousIntent.getStringExtra("type").equals("admin")){
                         type = "Admin";
                 }
@@ -51,13 +57,12 @@ public class Login extends AppCompatActivity {
                     //Database Verification Step Required
                     type = "ServiceProvider";
                 }
-                addUser();
-                username = (EditText)findViewById(R.id.editText3);
-                password = (EditText)findViewById(R.id.editText4);
+
+
                 if (username.getText().toString().contains("@") && password.getText().length()!=0) { //If username is an email and password isn't null
-                    //Intent toWelcome = new Intent(Login.this,Welcome.class);
-                    //toWelcome.putExtra("user",username.getText().toString());
-                    //startActivity(toWelcome);
+                    Intent toWelcome = new Intent(Login.this, Welcome.class);
+                    toWelcome.putExtra("user",username.getText().toString());
+                    startActivity(toWelcome);
 
                 }
 
@@ -66,10 +71,11 @@ public class Login extends AppCompatActivity {
     }
 
     private void addUser() {
+        String id = dr.push().getKey();
         String email = username.getText().toString().trim();
         String _password = password.getText().toString().trim();
         User user = new User(email, _password, type);
-        final Task<Void> voidTask = dr.child("User").child("ListOfUsers").child(type).child(user.getUsername()).setValue(user);
+        dr.child("ListOfUsers").child(id).setValue(user);
         Toast.makeText(this, "User added", Toast.LENGTH_LONG).show();
     }
 
