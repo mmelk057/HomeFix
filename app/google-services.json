@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "966019558070",
+    "firebase_url": "https://swapp-82400.firebaseio.com",
+    "project_id": "swapp-82400",
+    "storage_bucket": "swapp-82400.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:966019558070:android:418284803bb4b0f7",
+        "android_client_info": {
+          "package_name": "org.homefix.homefix"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "966019558070-p2rrasgj9l5sitnietb9faj2ku9canu4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.homefix.homefix",
+            "certificate_hash": "e5373cf91f6d772901463880f122511db690e6a4"
+          }
+        },
+        {
+          "client_id": "966019558070-8kkaqmm0r4vckuqp0rejue9hel0ivsb0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbZCkvvy_6nFjh13dOqnMTpXJX4LaFcw0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "966019558070-8kkaqmm0r4vckuqp0rejue9hel0ivsb0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
