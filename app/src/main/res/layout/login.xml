@@ -2,9 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/loginScreen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFF0c7">
+    android:background="@color/beige">
 
 
     <EditText
@@ -87,7 +88,10 @@
         android:background="#FFF0c7"
         android:cropToPadding="false"
         app:srcCompat="?attr/actionModeCloseDrawable"
-        tools:srcCompat="?attr/homeAsUpIndicator" />
+        tools:srcCompat="?attr/homeAsUpIndicator"
+        />
+
+
 
     <ImageView
         android:id="@+id/imageView3"
@@ -102,3 +106,4 @@
         app:srcCompat="@drawable/homefixicon" />
 
 </RelativeLayout>
+
