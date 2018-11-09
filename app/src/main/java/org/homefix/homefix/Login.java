@@ -15,23 +15,21 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-
 import java.util.regex.Pattern;
 
 public class Login extends AppCompatActivity {
 
-    DatabaseReference dr;
-    EditText username;
-    EditText password;
-    String type = "";
+    private DatabaseReference dr;
+    private EditText username;
+    private EditText password;
+    private String type = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-
         //Set up Login Button
-        Button loginButton = (Button)findViewById(R.id.Button2);
+        Button loginButton = findViewById(R.id.Button2);
         dr = FirebaseDatabase.getInstance().getReference("User");
 
         loginButton.setOnClickListener(new View.OnClickListener() {
