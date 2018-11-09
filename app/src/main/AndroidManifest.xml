@@ -14,7 +14,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,9 +25,13 @@
         <activity
             android:name=".Welcome"
             android:label="@string/title_activity_welcome" />
-        <activity android:name=".WelcomeAdmin">
-
-        </activity>
+        <activity android:name=".WelcomeAdmin" />
+        <activity android:name=".AdminServices"
+            android:exported="true"/>
+        <activity android:name=".EditService"
+            android:exported="true"/>
+        <activity android:name=".AddService"
+            android:exported="true"></activity>
     </application>
-
+    <!--android:exported="true" gives ability to run specified activity when running app-->
 </manifest>

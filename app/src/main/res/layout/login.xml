@@ -68,6 +68,7 @@
         android:fontFamily="@font/x"
         android:text="Login"
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        android:textColor="#000"
         tools:targetApi="lollipop"
         tools:text="Login" />
 
