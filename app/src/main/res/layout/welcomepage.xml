@@ -24,10 +24,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:background="#009FB7"
         android:layout_marginBottom="197dp"
+        android:background="#009FB7"
         android:fontFamily="@font/x"
         android:padding="20sp"
-        android:textColor="#fff"
-        android:text="Continue" />
+        android:text="Continue"
+        android:textColor="#000" />
 </RelativeLayout>
