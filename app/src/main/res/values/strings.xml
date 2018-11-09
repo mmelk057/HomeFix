@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">HomeFix</string>
     <color name="beige">#fff0c7</color>
+    <color name="button">#009FB7</color>
     <string name="login">Login</string>
     <string name="L">Login</string>
     <string name="textview">TextView</string>
@@ -21,7 +22,11 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
+    <string name="permission_rationale">"Contacts permissions are needed for providing email completions."
     </string>
+    <string name="add_service">Add Service</string>
+    <string name="remove_service">Remove Service</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="service_options">Service Options</string>
+
 </resources>
