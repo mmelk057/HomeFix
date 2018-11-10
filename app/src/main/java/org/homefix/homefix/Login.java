@@ -1,20 +1,23 @@
 package org.homefix.homefix;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.regex.Pattern;
 
@@ -24,7 +27,7 @@ public class Login extends AppCompatActivity {
     private EditText username;
     private EditText password;
     private String type = "";
-    private FirebaseAuth mAuth;
+    private FirebaseAuth mAuth; // Authorization HERE
 
 
     @Override
@@ -32,10 +35,16 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
         //Set up Login Button
-        Button loginButton = findViewById(R.id.Button2);
+        Button loginButton = findViewById(R.id.createaccountbutton);
+
+        // DATABASE
         mAuth = FirebaseAuth.getInstance();
         dr = FirebaseDatabase.getInstance().getReference("User");
 
+        // DATABASE
+
+
+        // BACKEND
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,26 +95,20 @@ public class Login extends AppCompatActivity {
                             }
                         }
                         if(areEmailSectionsValid){
+
                             if (type.equals("HomeOwner") || type.equals("ServiceProvider")) {
-                                Intent toWelcomeUser = new Intent(Login.this, Welcome.class);
-                                toWelcomeUser.putExtra("user", username.getText().toString());
-                                addUser(type);
-                                try {
-                                    startActivity(toWelcomeUser);
-                                } catch (Exception e) {
-                                    System.out.println("Error Starting Activity: " + e.getMessage() + "\n" + e.getStackTrace());
-                                }
+                                authenticate(true);
+                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
+                                        .setDisplayName(type) // DISPLAY NAME IS TYPE
+                                        .build();
+
                             }
                             else{
-                                Intent toWelcomeAdmin = new Intent(Login.this, WelcomeAdmin.class);
-                                toWelcomeAdmin.putExtra("user", username.getText().toString());
-                                addUser(type);
-                                try {
-                                    startActivity(toWelcomeAdmin);
-                                } catch (Exception e) {
-                                    System.out.println("Error Starting Activity: " + e.getMessage() + "\n" + e.getStackTrace());
 
-                                }
+                                authenticate(false);
+
+
                             }
                         }
                     }
@@ -113,22 +116,119 @@ public class Login extends AppCompatActivity {
 
             }
         });
+        //BACKEND
+    }
+//    private void addUserToDatabase(String type) {
+//
+//        String id = dr.push().getKey();
+//        String email = username.getText().toString().trim();
+//        User user = new User(email, type);
+//        if (type.equals("HomeOwner") || type.equals("ServiceProvider")) {
+//            dr.child("ListOfUsers").child(id).setValue(user);
+//            Toast.makeText(this, "User added", Toast.LENGTH_LONG).show();
+//        }
+//        else if (type.equals("Admin")){
+//            dr.child("Admin").child(id).setValue(user);
+//            Toast.makeText(this, "Admin added", Toast.LENGTH_LONG).show();
+//        }
+//    }
+
+
+    /*
+    * TODO updateUI method --> should make automatic login
+    *
+     */
+    public void updateUI(FirebaseUser user){
+        if(user != null && type.equals("Admin")){
+            // IF ADMIN
+            Intent toWelcomeAdmin = new Intent(Login.this, WelcomeAdmin.class);
+            toWelcomeAdmin.putExtra("user", username.getText().toString());
+            try {
+                startActivity(toWelcomeAdmin);
+            } catch (Exception e) {
+                System.out.println("Error Starting Activity: " + e.getMessage() + "\n" + e.getStackTrace());
+
+            }
+        } else if(user != null && type.equals("")){
+            // IF USER
+            Intent toWelcomeUser = new Intent(Login.this, Welcome.class);
+            toWelcomeUser.putExtra("user", username.getText().toString());
+            try {
+                startActivity(toWelcomeUser);
+            } catch (Exception e) {
+                System.out.println("Error Starting Activity: " + e.getMessage() + "\n" + e.getStackTrace());
+            }
+
+        }
+        else {
+            username.setText("");
+            password.setText("");
+        }
+
     }
 
-    private void addUser(String type) {
 
-        String id = dr.push().getKey();
+    private boolean createNewUser(){
         String email = username.getText().toString().trim();
         String _password = password.getText().toString().trim();
-        User user = new User(email, _password, type);
-        if (type.equals("HomeOwner") || type.equals("ServiceProvider")) {
-            dr.child("ListOfUsers").child(id).setValue(user);
-            Toast.makeText(this, "User added", Toast.LENGTH_LONG).show();
-        }
-        else if (type.equals("Admin")){
-            dr.child("Admin").child(id).setValue(user);
-            Toast.makeText(this, "Admin added", Toast.LENGTH_LONG).show();
-        }
+        mAuth.createUserWithEmailAndPassword(email, _password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("login.java", "createUserWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            updateUI(user);
+                            //addUserToDatabase(type); // ADDING TO DB Separately
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("login.java", "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(Login.this, "Creation failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            updateUI(null);
+
+                        }
+
+                    }
+                });
+        return true;
     }
+
+
+
+    /*
+    * Authenticates user based on fireAuth
+    * Accepts String, String, Boolean
+    * Returns True on success
+     */
+    private boolean authenticate(boolean shouldCreateNewOnNotExist){
+        if(shouldCreateNewOnNotExist){
+            createNewUser();
+        }
+        String email = username.getText().toString().trim();
+        String _password = password.getText().toString().trim();
+        mAuth.signInWithEmailAndPassword(email, _password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("login.java", "signInWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("login.java", "signInWithEmail:failure", task.getException());
+                            Toast.makeText(Login.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            updateUI(null);
+                        }
+                    }
+                });
+
+        return true;
+    }
+
 
 }
