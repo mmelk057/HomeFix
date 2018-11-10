@@ -1,8 +1,29 @@
-package src;
+package org.homefix.homefix;
 
 import java.util.ArrayList;
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.regex.Pattern;
+
+import src.HomeOwner;
+import src.ServiceProvider;
 
 public class Service {
+    private DatabaseReference dr;
     private ServiceProvider serviceProv;
     private ArrayList<HomeOwner> homeOwners;
     private String serviceName;
@@ -10,6 +31,9 @@ public class Service {
     private boolean approved;
     private boolean isActive;
     private boolean isAvailable;
+    private EditText name;
+    private EditText rate;
+    private EditText details;
 
     public Service(String serviceName,String info,boolean approved){
         this.serviceName = serviceName;
@@ -21,6 +45,7 @@ public class Service {
         this.info = info;
         this.approved = false;
     }
+
 
     public boolean containsHomeOwner(HomeOwner ho){
         return true; //temporary
