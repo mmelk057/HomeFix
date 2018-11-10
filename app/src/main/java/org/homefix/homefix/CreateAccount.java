@@ -111,6 +111,7 @@ public class CreateAccount extends AppCompatActivity {
         signinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // CHANGING SCREEN
                 Intent toLogin = new Intent(CreateAccount.this,Login.class);
                 toLogin.putExtra("type",type);
                 startActivity(toLogin);
@@ -147,8 +148,8 @@ public class CreateAccount extends AppCompatActivity {
      *
      */
     public void updateUI(FirebaseUser user) {
-         if (user != null && type.equals("")) {
-            // IF USER
+         if (user != null) {
+            // CHANGE IN SCREEN
             Intent toWelcomeUser = new Intent(CreateAccount.this, Welcome.class);
             toWelcomeUser.putExtra("user", username.getText().toString());
             try {
@@ -160,6 +161,7 @@ public class CreateAccount extends AppCompatActivity {
         } else {
             username.setText("");
             password.setText("");
+            confirmpassword.setText("");
         }
 
     }
