@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--everything is within a ScrollView for the list of services-->
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/adminServicesScreen"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -17,16 +9,17 @@
         android:exported="true">
 
         <!--button to go to previous page-->
+
         <ImageButton
-            android:id="@+id/imageButton2"
+            android:id="@+id/serviceListBackButton"
             style="@style/Widget.AppCompat.ImageButton"
             android:layout_width="65dp"
             android:layout_height="42dp"
-            android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="4dp"
             android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="5dp"
             android:adjustViewBounds="false"
             android:background="#FFF0c7"
@@ -54,7 +47,7 @@
 
         <!--Add services button will link to the addservice.xml-->
         <Button
-            android:id="@+id/button"
+            android:id="@+id/serviceListAddButton"
             android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -65,296 +58,16 @@
             android:textColor="#000"
             android:textSize="20sp" />
 
-        <!--There are 3 LinearLayouts with 3 lists, one is a list of delete buttons (for each service), one is a list of serivces, and one is a list of edit buttons (for each service)-->
-
-        <!--LinearLayout for id listItems is for the services, each button in this layout goes to its own servicedetails.xml-->
-        <LinearLayout
-            android:id="@+id/listItems"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textView"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="41dp"
-            android:layout_marginLeft="41dp"
-            android:layout_marginTop="44dp"
-            android:layout_marginEnd="51dp"
-            android:layout_marginRight="51dp"
-            android:layout_marginBottom="0dp"
-            android:background="@android:color/transparent"
-            android:isScrollContainer="true"
-            android:orientation="vertical"
-            android:paddingBottom="20sp">
+    <ListView
+        android:id="@+id/service_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="166dp" />
 
 
-            <Button
-                android:id="@+id/listItem1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10sp"
-                android:background="#35CEE9"
-                android:text="List Item 1" />
+</RelativeLayout>
 
-            <Button
-                android:id="@+id/listItem2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10sp"
-                android:background="#35CEE9"
-                android:text="List Item 2" />
-
-            <Button
-                android:id="@+id/listItem3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10sp"
-                android:background="#35CEE9"
-                android:text="List Item 3" />
-
-            <Button
-                android:id="@+id/listItem4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10sp"
-                android:background="#35CEE9"
-                android:text="List Item 4" />
-
-            <Button
-                android:id="@+id/listItem5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10sp"
-                android:background="#35CEE9"
-                android:text="List Item 5" />
-
-            <Button
-                android:id="@+id/listItem6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10sp"
-                android:background="#35CEE9"
-                android:text="List Item 6" />
-
-            <Button
-                android:id="@+id/listItem7"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10sp"
-                android:background="#35CEE9"
-                android:text="List Item 7" />
-
-            <Button
-                android:id="@+id/listItem8"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10sp"
-                android:background="#35CEE9"
-                android:text="List Item 8" />
-
-            <Button
-                android:id="@+id/listItem9"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#35CEE9"
-                android:text="List Item 9" />
-            <!--final button in list has no android:layout_marginBottom="10sp" -->
-        </LinearLayout>
-
-        <!--LinearLayout with id deleteItems has deleting buttons (blended into services LinearLayout), and each delete button prompts deletion of its associated service item-->
-        <LinearLayout
-            android:id="@+id/deleteItems"
-            android:layout_width="41dp"
-            android:layout_height="532dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="0dp"
-            android:layout_marginLeft="0dp"
-            android:orientation="vertical"
-            android:paddingBottom="20sp">
-
-            <Button
-                android:id="@+id/deleteItem1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10sp"
-                android:background="#35CEE9"
-                android:text="X"
-                android:textColor="#028CA4"
-                android:textSize="25sp" />
-
-            <Button
-                android:id="@+id/deleteItem2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10sp"
-                android:background="#35CEE9"
-                android:text="X"
-                android:textColor="#028CA4"
-                android:textSize="25sp" />
-
-            <Button
-                android:id="@+id/deleteItem3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10sp"
-                android:background="#35CEE9"
-                android:text="X"
-                android:textColor="#028CA4"
-                android:textSize="25sp" />
-
-            <Button
-                android:id="@+id/deleteItem4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10sp"
-                android:background="#35CEE9"
-                android:text="X"
-                android:textColor="#028CA4"
-                android:textSize="25sp" />
-
-            <Button
-                android:id="@+id/deleteItem5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10sp"
-                android:background="#35CEE9"
-                android:text="X"
-                android:textColor="#028CA4"
-                android:textSize="25sp" />
-
-            <Button
-                android:id="@+id/deleteItem6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10sp"
-                android:background="#35CEE9"
-                android:text="X"
-                android:textColor="#028CA4"
-                android:textSize="25sp" />
-
-            <Button
-                android:id="@+id/deleteItem7"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10sp"
-                android:background="#35CEE9"
-                android:text="X"
-                android:textColor="#028CA4"
-                android:textSize="25sp" />
-
-            <Button
-                android:id="@+id/deleteItem8"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10sp"
-                android:background="#35CEE9"
-                android:text="X"
-                android:textColor="#028CA4"
-                android:textSize="25sp" />
-
-            <Button
-                android:id="@+id/deleteItem9"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#35CEE9"
-                android:text="X"
-                android:textColor="#028CA4"
-                android:textSize="25sp" />
-            <!--final button in list has no android:layout_marginBottom="10sp" -->
-        </LinearLayout>
-
-        <!--LinearLayout id editItems has edit buttons for every according service item (each edit button links to its own editservices.xml)-->
-        <LinearLayout
-            android:id="@+id/editItems"
-            android:layout_width="wrap_content"
-            android:layout_height="532dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="333dp"
-            android:layout_marginLeft="333dp"
-            android:orientation="vertical"
-            android:paddingBottom="20sp">
-
-            <Button
-                android:id="@+id/editItem1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10sp"
-                android:background="@android:color/transparent"
-                android:text="edit" />
-
-            <Button
-                android:id="@+id/editItem2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10sp"
-                android:background="@android:color/transparent"
-                android:text="edit" />
-
-            <Button
-                android:id="@+id/editItem3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10sp"
-                android:background="@android:color/transparent"
-                android:text="edit" />
-
-            <Button
-                android:id="@+id/editItem4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10sp"
-                android:background="@android:color/transparent"
-                android:text="edit" />
-
-            <Button
-                android:id="@+id/editItem5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10sp"
-                android:background="@android:color/transparent"
-                android:text="edit" />
-
-            <Button
-                android:id="@+id/editItem6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10sp"
-                android:background="@android:color/transparent"
-                android:text="edit" />
-
-            <Button
-                android:id="@+id/editItem7"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10sp"
-                android:background="@android:color/transparent"
-                android:text="edit" />
-
-            <Button
-                android:id="@+id/editItem8"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10sp"
-                android:background="@android:color/transparent"
-                android:text="edit" />
-
-            <Button
-                android:id="@+id/editItem9"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:text="edit" />
-            <!--final button in list has no android:layout_marginBottom="10sp" -->
-        </LinearLayout>
-
-
-    </RelativeLayout>
-
-</ScrollView>
 

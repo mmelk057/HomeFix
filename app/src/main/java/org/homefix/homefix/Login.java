@@ -6,14 +6,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.regex.Pattern;
 
@@ -29,7 +26,8 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
         //Set up Login Button
-        Button loginButton = findViewById(R.id.Button2);
+        Button loginButton = findViewById(R.id.editServiceSaveButton);
+        ImageButton backButton = findViewById(R.id.loginBackButton);
         dr = FirebaseDatabase.getInstance().getReference("User");
 
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -93,7 +91,7 @@ public class Login extends AppCompatActivity {
                                 }
                             }
                             else{
-                                Intent toWelcomeAdmin = new Intent(Login.this, WelcomeAdmin.class);
+                                Intent toWelcomeAdmin = new Intent(Login.this, AdminOptions.class);
                                 toWelcomeAdmin.putExtra("user", username.getText().toString());
                                 addUser(type);
                                 try {
@@ -107,6 +105,14 @@ public class Login extends AppCompatActivity {
                     }
                 }
 
+            }
+        });
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent backToMain = new Intent(Login.this,MainActivity.class);
+                startActivity(backToMain);
             }
         });
     }

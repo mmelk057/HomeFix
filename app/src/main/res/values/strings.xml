@@ -28,5 +28,6 @@
     <string name="show_service_list">Show Service List</string>
     <string name="sign_out">Sign Out</string>
     <string name="service_options">Service Options</string>
+    <string name="title_activity_service_info">ServiceInfo</string>
 
 </resources>
