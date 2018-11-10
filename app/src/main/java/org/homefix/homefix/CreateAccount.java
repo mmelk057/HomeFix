@@ -99,14 +99,14 @@ public class CreateAccount extends AppCompatActivity {
                             UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
                                     .setDisplayName(type) // DISPLAY NAME IS TYPE
                                     .build();
+                        }
                     }
+
                 }
-
             }
-        }
-        //BACKEND
+            //BACKEND
 
-    });
+        });
 
         signinButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,13 +122,13 @@ public class CreateAccount extends AppCompatActivity {
 
     private boolean validatePassword(){
 
-       String p1 = password.getText().toString().trim();
-       String p2 = confirmpassword.getText().toString().trim();
-       if(!p1.equals(p2)){
-           Toast.makeText(this, "Passwords entered do not match!", Toast.LENGTH_LONG);
-           return false;
-       }
-       return true;
+        String p1 = password.getText().toString().trim();
+        String p2 = confirmpassword.getText().toString().trim();
+        if(!p1.equals(p2)){
+            Toast.makeText(this, "Passwords entered do not match!", Toast.LENGTH_LONG);
+            return false;
+        }
+        return true;
     }
 
 
@@ -148,7 +148,7 @@ public class CreateAccount extends AppCompatActivity {
      *
      */
     public void updateUI(FirebaseUser user) {
-         if (user != null) {
+        if (user != null) {
             // CHANGE IN SCREEN
             Intent toWelcomeUser = new Intent(CreateAccount.this, Welcome.class);
             toWelcomeUser.putExtra("user", username.getText().toString());
@@ -194,37 +194,37 @@ public class CreateAccount extends AppCompatActivity {
         return true;
     }
 
-        /*
-         * Authenticates user based on fireAuth
-         * Accepts String, String, Boolean
-         * Returns True on success
-         */
-        private boolean authenticate(boolean shouldCreateNewOnNotExist){
-            if(shouldCreateNewOnNotExist){
-                createNewUser();
-            }
-            String email = username.getText().toString().trim();
-            String _password = password.getText().toString().trim();
-            mAuth.signInWithEmailAndPassword(email, _password)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                Log.d("createaccount.java", "signInWithEmail:success");
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                updateUI(user);
-                            } else {
-                                // If sign in fails, display a message to the user.
-                                Log.w("createaccount.java", "signInWithEmail:failure", task.getException());
-                                Toast.makeText(CreateAccount.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
-                                updateUI(null);
-                            }
-                        }
-                    });
-
-            return true;
+    /*
+     * Authenticates user based on fireAuth
+     * Accepts String, String, Boolean
+     * Returns True on success
+     */
+    private boolean authenticate(boolean shouldCreateNewOnNotExist){
+        if(shouldCreateNewOnNotExist){
+            createNewUser();
         }
+        String email = username.getText().toString().trim();
+        String _password = password.getText().toString().trim();
+        mAuth.signInWithEmailAndPassword(email, _password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("createaccount.java", "signInWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("createaccount.java", "signInWithEmail:failure", task.getException());
+                            Toast.makeText(CreateAccount.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            updateUI(null);
+                        }
+                    }
+                });
+
+        return true;
+    }
 
 }

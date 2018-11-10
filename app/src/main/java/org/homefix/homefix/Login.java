@@ -56,7 +56,7 @@ public class Login extends AppCompatActivity {
                 Intent previousIntent = getIntent();
                 System.out.println(previousIntent.getStringExtra("type"));
                 if (previousIntent.getStringExtra("type").equals("admin")){
-                        type = "Admin";
+                    type = "Admin";
                 }
                 else if (previousIntent.getStringExtra("type").equals("homeOwner")){
                     //Database Verification Step Required
@@ -135,8 +135,8 @@ public class Login extends AppCompatActivity {
 
 
     /*
-    * TODO updateUI method --> should make automatic login
-    *
+     * TODO updateUI method --> should make automatic login
+     *
      */
     public void updateUI(FirebaseUser user){
         if(user != null && type.equals("Admin")){
@@ -198,9 +198,9 @@ public class Login extends AppCompatActivity {
 
 
     /*
-    * Authenticates user based on fireAuth
-    * Accepts String, String, Boolean
-    * Returns True on success
+     * Authenticates user based on fireAuth
+     * Accepts String, String, Boolean
+     * Returns True on success
      */
     private boolean authenticate(boolean shouldCreateNewOnNotExist){
         if(shouldCreateNewOnNotExist){
