@@ -26,9 +26,19 @@
         <activity
             android:name=".Welcome"
             android:label="@string/title_activity_welcome" />
-        <activity android:name=".WelcomeAdmin">
-
-        </activity>
+        <activity android:name=".WelcomeAdmin" />
+        <activity android:name=".AdminServices"
+            android:exported="true"/>
+        <activity android:name=".EditService"
+            android:exported="true"/>
+        <activity android:name=".AddService"
+            android:exported="true"></activity>
+        <activity
+            android:name=".AdminOptions"
+            android:exported="true"
+            ></activity>
+        <activity android:name=".ServiceDetails"
+            android:exported="true"></activity>
     </application>
-
+    <!--android:exported="true" allows app to run specified activity-->
 </manifest>

@@ -2,27 +2,26 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/loginScreen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFF0c7">
+    android:background="@color/beige">
 
 
     <EditText
         android:id="@+id/editText3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/imageView3"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="97dp"
-        android:layout_marginLeft="97dp"
-        android:layout_marginTop="57dp"
-        android:layout_marginEnd="82dp"
-        android:layout_marginRight="82dp"
-        android:layout_marginBottom="227dp"
+        android:layout_marginStart="101dp"
+        android:layout_marginLeft="101dp"
+        android:layout_marginEnd="78dp"
+        android:layout_marginRight="78dp"
+        android:layout_marginBottom="208dp"
         android:autofillHints=""
         android:ems="10"
         android:fontFamily="@font/x"
@@ -33,16 +32,16 @@
         android:id="@+id/editText4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/Button2"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
         android:layout_marginStart="100dp"
         android:layout_marginLeft="100dp"
         android:layout_marginEnd="79dp"
         android:layout_marginRight="79dp"
-        android:layout_marginBottom="144dp"
+        android:layout_marginBottom="31dp"
         android:autofillHints=""
         android:ems="10"
         android:fontFamily="@font/x"
@@ -69,6 +68,7 @@
         android:fontFamily="@font/x"
         android:text="Login"
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        android:textColor="#000"
         tools:targetApi="lollipop"
         tools:text="Login" />
 
@@ -87,7 +87,9 @@
         android:background="#FFF0c7"
         android:cropToPadding="false"
         app:srcCompat="?attr/actionModeCloseDrawable"
-        tools:srcCompat="?attr/homeAsUpIndicator" />
+        tools:srcCompat="?attr/homeAsUpIndicator"
+        />
+
 
     <ImageView
         android:id="@+id/imageView3"
@@ -96,9 +98,14 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_marginStart="151dp"
         android:layout_marginLeft="151dp"
         android:layout_marginTop="139dp"
+        android:layout_marginEnd="133dp"
+        android:layout_marginRight="133dp"
         app:srcCompat="@drawable/homefixicon" />
 
 </RelativeLayout>
+

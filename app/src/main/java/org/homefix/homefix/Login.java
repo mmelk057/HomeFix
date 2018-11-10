@@ -9,29 +9,31 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-
 import java.util.regex.Pattern;
 
 public class Login extends AppCompatActivity {
 
-    DatabaseReference dr;
-    EditText username;
-    EditText password;
-    String type = "";
+    private DatabaseReference dr;
+    private EditText username;
+    private EditText password;
+    private String type = "";
+    private FirebaseAuth mAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-
         //Set up Login Button
-        Button loginButton = (Button)findViewById(R.id.Button2);
+        Button loginButton = findViewById(R.id.Button2);
+        mAuth = FirebaseAuth.getInstance();
         dr = FirebaseDatabase.getInstance().getReference("User");
 
         loginButton.setOnClickListener(new View.OnClickListener() {
