@@ -9,6 +9,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class EditService extends AppCompatActivity {
 
     @Override
@@ -23,7 +27,7 @@ public class EditService extends AppCompatActivity {
 
         //Instantiate all Buttons
         ImageButton backButton = findViewById(R.id.editServiceBackButton);
-        Button saveButton = findViewById(R.id.editServiceSaveButton);
+        Button saveButton = findViewById(R.id.saveButton);
 
         //Instantiate all EditText Objects
         final EditText nameField=findViewById(R.id.serviceName);
@@ -57,7 +61,10 @@ public class EditService extends AppCompatActivity {
 
                     /////////////////
                     /////////////////
-
+                    final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                    DatabaseReference dr = FirebaseDatabase.getInstance().getReference("Service");
+                    Database db = new Database(dr,nameField,rateField,infoField,EditService.this);
+                    db.updateService(name,nameField.getText().toString(),Double.parseDouble(rateField.getText().toString()),infoField.getText().toString());
                     //DB REPLACE INFO
 
                     /////////////////

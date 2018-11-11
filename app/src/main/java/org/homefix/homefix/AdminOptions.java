@@ -22,8 +22,8 @@ public class AdminOptions extends AppCompatActivity {
         signOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent backToLogin = new Intent(AdminOptions.this,Login.class);
-                startActivity(backToLogin);
+                Intent backToMainActivity = new Intent(AdminOptions.this,MainActivity.class);
+                startActivity(backToMainActivity);
             }
         });
 
