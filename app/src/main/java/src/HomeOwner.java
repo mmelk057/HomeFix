@@ -1,5 +1,7 @@
 package src;
 
+import org.homefix.homefix.Service;
+
 import java.util.ArrayList;
 
 public class HomeOwner extends User {

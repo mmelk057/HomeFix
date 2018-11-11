@@ -39,8 +39,9 @@ public class MainActivity extends AppCompatActivity {
         homeOwnerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent toLogin = new Intent(MainActivity.this,Login.class);
+                Intent toLogin = new Intent(MainActivity.this,CreateAccount.class);
                 toLogin.putExtra("type","homeOwner");
+                System.out.println(toLogin);
                 startActivity(toLogin);
             }
         });
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         spButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent toLogin = new Intent(MainActivity.this,Login.class);
+                Intent toLogin = new Intent(MainActivity.this,CreateAccount.class);
                 toLogin.putExtra("type","sp");
                 startActivity(toLogin);
             }

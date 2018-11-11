@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/beige"
+    tools:context=".AdminOptions"
+    android:id="@+id/admin_options">
+
+
+    <!--this page is the admin options page that should display if they want to add a service or remove a service-->
+    <!--there is also a sign out button for the admin to log off-->
+
+
+    <!--add a service option-->
+    <Button
+        android:id="@+id/addServiceButton"
+        android:layout_width="wrap_content"
+        android:layout_height="46dp"
+        android:layout_above="@+id/serviceListAddButton"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="38dp"
+        android:layout_marginLeft="38dp"
+        android:layout_marginEnd="41dp"
+        android:layout_marginRight="41dp"
+        android:layout_marginBottom="56dp"
+        android:background="#009FB7"
+        android:fontFamily="@font/x"
+        android:text="@string/add_service"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textSize="15sp"
+        tools:targetApi="jelly_bean" />
+
+    <!--show service list -->
+    <Button
+        android:id="@+id/serviceListAddButton"
+        android:layout_width="wrap_content"
+        android:layout_height="47dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="39dp"
+        android:layout_marginLeft="39dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginBottom="68dp"
+        android:background="#009FB7"
+        android:fontFamily="@font/x"
+        android:text="@string/show_service_list"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/addServiceText"
+        android:layout_width="230dp"
+        android:layout_height="70dp"
+        android:layout_above="@+id/addServiceButton"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="65dp"
+        android:layout_marginLeft="65dp"
+        android:layout_marginEnd="65dp"
+        android:layout_marginRight="65dp"
+        android:layout_marginBottom="81dp"
+        android:fontFamily="@font/x"
+        android:gravity="center"
+        android:text="@string/service_options"
+        android:textSize="25sp" />
+
+    <!--sign out button or log off-->
+    <Button
+        android:id="@+id/signOutButton"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="99dp"
+        android:layout_height="52dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="10dp"
+        android:layout_marginLeft="251dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginStart="251dp"
+        android:layout_marginTop="25dp"
+        android:fontFamily="@font/x"
+        android:text="@string/sign_out" />
+
+</RelativeLayout>
+
