@@ -8,6 +8,10 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class ServiceInfo extends AppCompatActivity {
 
     @Override
@@ -28,7 +32,7 @@ public class ServiceInfo extends AppCompatActivity {
         //Set up all Button Objects
         ImageButton serviceInfoBack = findViewById(R.id.servInfoBackButton);
         Button editButton = findViewById(R.id.editButton);
-        Button removeButton = findViewById(R.id.editServiceSaveButton);
+        Button removeButton = findViewById(R.id.saveButton);
 
         serviceName.setText(name);
         serviceRate.setText(rate+"$/hr");
@@ -59,7 +63,8 @@ public class ServiceInfo extends AppCompatActivity {
                 //DB Remove Service Function
 
                 ////////////////////////////
-
+                Database db = new Database();
+                db.deleteService(name);
                 ////////////////////////////
 
 

@@ -39,19 +39,19 @@ public class MainActivity extends AppCompatActivity {
         homeOwnerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent toLogin = new Intent(MainActivity.this,CreateAccount.class);
-                toLogin.putExtra("type","homeOwner");
-                System.out.println(toLogin);
-                startActivity(toLogin);
+                Intent toAccount = new Intent(MainActivity.this,CreateAccount.class);
+                toAccount.putExtra("type","homeOwner");
+                System.out.println(toAccount);
+                startActivity(toAccount);
             }
         });
 
         spButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent toLogin = new Intent(MainActivity.this,CreateAccount.class);
-                toLogin.putExtra("type","sp");
-                startActivity(toLogin);
+                Intent toAccount = new Intent(MainActivity.this,CreateAccount.class);
+                toAccount.putExtra("type","sp");
+                startActivity(toAccount);
             }
         });
     }

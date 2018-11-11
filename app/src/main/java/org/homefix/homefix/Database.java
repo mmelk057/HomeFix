@@ -52,6 +52,9 @@ public class Database extends AppCompatActivity {
         this.activity = activity;
         didAuth = false;
     }
+    public Database(){
+
+    }
 
     // CONSTRUCTOR WHEN USING USER
     public Database(DatabaseReference dr, EditText username, EditText password, String type, Activity activity){
@@ -65,12 +68,12 @@ public class Database extends AppCompatActivity {
 
     public void addService() {
         String id = dr.push().getKey();
-        String _serviceName = serviceName.getText().toString().trim();
-        String _rate = rate.getText().toString().trim();
-        String _details = details.getText().toString().trim();
-        Service service = new Service(_serviceName, _rate, _details);
+        String _serviceName = serviceName.getText().toString();
+        String _rate = rate.getText().toString();
+        String _details = details.getText().toString();
+        ServiceCategory service = new ServiceCategory(_serviceName,Double.parseDouble(_rate),_details);
         dr.child("Service").child(id).setValue(service);
-        Toast.makeText(this, "Service added", Toast.LENGTH_LONG).show();
+//        Toast.makeText(getApplicationContext(), "Service added", Toast.LENGTH_LONG).show();
     }
 
     public void addUserToDatabase(String type) {
@@ -78,20 +81,20 @@ public class Database extends AppCompatActivity {
         String email = username.getText().toString().trim();
         User user = new User(email, type);
         dr.child("ListOfUsers").child(id).setValue(user);
-        Toast.makeText(this, "User added", Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, "User added", Toast.LENGTH_LONG).show();
     }
 
 
-    public boolean deleteService(final String name){
-        DatabaseReference dR = FirebaseDatabase.getInstance().getReference("Service");
+    public void deleteService(final String name){
+        final DatabaseReference dR = FirebaseDatabase.getInstance().getReference("Service").child("Service");
         dR.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot service: dataSnapshot.getChildren()){
                     String tmpService = (String)service.child("name").getValue();
-                    String key = service.getKey();
                     if (tmpService.equals(name)) {
-                        dR.child(key).removeValue(); // SHOULD REMOVE SERVICE
+                        dR.child(service.getKey()).removeValue(); // SHOULD REMOVE SERVICE
+                        break;
                     }
 
                 }
@@ -102,14 +105,39 @@ public class Database extends AppCompatActivity {
 
             }
         });
-        Toast.makeText(getApplicationContext(),"Service deleted",Toast.LENGTH_LONG).show();
-        return true;
     }
 
 
+    public ArrayList<ServiceCategory> listServices(final String tableName){
+        DatabaseReference dR = FirebaseDatabase.getInstance().getReference("data").child(tableName);
+        final ArrayList<ServiceCategory> services = new ArrayList<ServiceCategory>();
+        dR.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot service: dataSnapshot.getChildren()){
+                    String id = service.getKey();
+                    String info = (String)service.child(id).child("info").getValue();
+                    String name = (String)service.child(id).child("name").getValue();
+                    Double rate = Double.parseDouble((String)service.child(id).child("rate").getValue());
+                    if (info!=null && details != null && rate != null) {
+                        ServiceCategory s = new ServiceCategory(name,rate,info);
+                        services.add(s);
+                    }
 
-    public void updateService(final String oldName,final final String newName, final double rate, final String details){
-        DatabaseReference dR = FirebaseDatabase.getInstance().getReference("Service");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        return services;
+    }
+
+
+    public void updateService(final String oldName,final String newName, final double rate, final String details){
+        final DatabaseReference dR = FirebaseDatabase.getInstance().getReference("Service").child("Service");
         dR.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -117,8 +145,8 @@ public class Database extends AppCompatActivity {
                     String tmpService = (String)service.child("name").getValue();
                     String id = service.getKey();
                     if (tmpService.equals(oldName)) {
-                        Service s = new Service(newName, rate, details); // SHOULD MAKE NEW SERVICE AND REPLACE AT ID
-                        dR.child("Service").child(id).setValue(s);
+                        ServiceCategory s = new ServiceCategory(newName, rate, details); // SHOULD MAKE NEW SERVICE AND REPLACE AT ID
+                        dR.child(id).setValue(s);
                     }
 
                 }
@@ -129,7 +157,7 @@ public class Database extends AppCompatActivity {
 
             }
         });
-        Toast.makeText(getApplicationContext(),"Service updated",Toast.LENGTH_LONG).show();
+
     }
 
     public boolean authenticate(final FirebaseAuth mAuth, boolean shouldCreateNewOnNotExist){
@@ -138,13 +166,11 @@ public class Database extends AppCompatActivity {
         }
         String email = username.getText().toString().trim();
         String _password = password.getText().toString().trim();
-        mAuth.signInWithEmailAndPassword(email, _password)
-                .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
+        mAuth.signInWithEmailAndPassword(email, _password).addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             setdidAuth(true);
-
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("-", "signInWithEmail:success");
                             //updateUI(user);

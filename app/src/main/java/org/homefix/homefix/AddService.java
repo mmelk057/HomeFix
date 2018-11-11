@@ -9,6 +9,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class AddService extends AppCompatActivity {
 
     @Override
@@ -17,8 +21,8 @@ public class AddService extends AppCompatActivity {
         setContentView(R.layout.addservice);
 
         //Instantiate Back and Save Buttons
-        ImageButton back = findViewById(R.id.addServBackButton);
-        Button save = findViewById(R.id.editServiceSaveButton);
+        ImageButton back = findViewById(R.id.addServiceBackButton);
+        Button save = findViewById(R.id.saveButton);
 
         //Instantiate EditText Objects
         final EditText nameField=findViewById(R.id.serviceName);
@@ -47,12 +51,6 @@ public class AddService extends AppCompatActivity {
                 @Override
                 public void onClick(View v){
 
-                    //add Service in DB
-                    //////////////////////////////
-
-                    //////////////////////////////
-
-
                     if (nameField.getText().toString().equals("") || rateField.getText().toString().equals("") || infoField.getText().toString().equals("")) {
                         //Print Error Message
                         Toast nullErrorMessage = Toast.makeText(getApplicationContext(),"Error: One or more fields are null",Toast.LENGTH_LONG);
@@ -62,6 +60,16 @@ public class AddService extends AppCompatActivity {
                         //WORK ON MAKING A CUSTOM TOAST MESSAGE WITH CUSTOM LAYOUT (!!)
                     }
                     else{
+
+                        //add Service in DB
+                        //////////////////////////////
+                        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                        DatabaseReference dr = FirebaseDatabase.getInstance().getReference("Service");
+                        Database db = new Database(dr,nameField,rateField,infoField,AddService.this);
+                        db.addService();
+                        //////////////////////////////
+
+
                         if(prevClass.equals("AdminOptions")){
                             Intent backTrack = new Intent(AddService.this,AdminOptions.class);
                             startActivity(backTrack);
@@ -71,6 +79,10 @@ public class AddService extends AppCompatActivity {
                             startActivity(backTrack);
                         }
                     }
+
+
+
+
 
             }
         });
