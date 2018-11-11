@@ -3,12 +3,12 @@ package org.homefix.homefix;
 public class User { // TMP
     private String username; // is before @mail.com
     private String email;
-    private String password;
+    //private String password;
     private String type;
 
-    public User(String email, String password, String type){
+    public User(String email, String type){
         this.email = email;
-        this.password = password;
+        //this.password = password;
         this.type = type;
 
         int indexOfAt = email.length();
@@ -27,9 +27,9 @@ public class User { // TMP
         return email;
     }
 
-    public String getPassword() {
-        return password;
-    }
+    //public String getPassword() {
+    //    return password;
+    //}
 
     public String getType(){
         return type;

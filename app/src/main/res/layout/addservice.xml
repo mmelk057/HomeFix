@@ -9,7 +9,7 @@
 
     <!--Save button-->
     <Button
-        android:id="@+id/editServiceSaveButton"
+        android:id="@+id/createaccountbutton"
         style="@android:style/Widget.Material.Button"
         android:layout_width="180dp"
         android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
 
     <!--previous page button-->
     <ImageButton
-        android:id="@+id/addServBackButton"
+        android:id="@+id/imageButton2"
         style="@style/Widget.AppCompat.ImageButton"
         android:layout_width="65dp"
         android:layout_height="42dp"
@@ -51,7 +51,7 @@
 
     <!--xml title-->
     <TextView
-        android:id="@+id/addServiceText"
+        android:id="@+id/textView2"
         android:layout_width="176dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -73,6 +73,8 @@
         android:id="@+id/serviceContents"
         android:layout_width="wrap_content"
         android:layout_height="197dp"
+        android:layout_above="@+id/createaccountbutton"
+        android:layout_below="@+id/textView2"
         android:layout_above="@+id/editServiceSaveButton"
         android:layout_below="@+id/addServiceText"
         android:layout_alignParentStart="true"
