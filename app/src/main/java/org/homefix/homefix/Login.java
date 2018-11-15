@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -36,7 +37,6 @@ public class Login extends AppCompatActivity {
 
         // DATABASE
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        final DatabaseReference dr = FirebaseDatabase.getInstance().getReference("User");
 
         // Setting up previous intent
         final Intent previousIntent = getIntent();
@@ -89,40 +89,13 @@ public class Login extends AppCompatActivity {
                         }
                         if(areEmailSectionsValid){
                             final String email_final = username.getText().toString();
-                            final String pass_final= password.getText().toString();
+                            final String password_final= password.getText().toString();
 
                             //Authenticates user's email and password
+                            DatabaseReference dr = FirebaseDatabase.getInstance().getReference("User");
+                            Database loggingIn = new Database(dr,Login.this,getApplicationContext());
+                            loggingIn.loginAuthentication(email_final,password_final,type);
 
-                            mAuth.signInWithEmailAndPassword(email_final,pass_final).addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()) {
-                                        // Sign in success, update UI with the signed-in user's information
-                                        Log.d("login.java", "signInWithEmail:success");
-                                        FirebaseUser user = mAuth.getCurrentUser();
-
-                                        // If the user is not a null object, that means authentication worked!
-
-                                        if (user!=null){
-                                            if (type.equals("HomeOwner") || type.equals("ServiceProvider")) {
-                                                Intent toWelcomePage = new Intent(Login.this,Welcome.class);
-                                                toWelcomePage.putExtra("user",email_final);
-                                                startActivity(toWelcomePage);
-                                                //UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder().setDisplayName(type); // DISPLAY NAME IS TYPE.build();
-                                            }
-                                            else{
-                                                Intent toAdminOptions = new Intent(Login.this,AdminOptions.class);
-                                                startActivity(toAdminOptions);
-                                            }
-                                        }
-                                    } else {
-                                        // If sign in fails, display a message to the user.
-                                        Log.w("login.java", "signInWithEmail:failure", task.getException());
-                                        Toast.makeText(Login.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-
-                                    }
-                                }
-                            });
 
                         }
                     }

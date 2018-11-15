@@ -1,6 +1,7 @@
 package org.homefix.homefix;
 
 import android.content.Intent;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,7 +25,6 @@ import java.util.regex.Pattern;
 
 public class CreateAccount extends AppCompatActivity {
     private String type = "";
-    DatabaseReference dr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +34,6 @@ public class CreateAccount extends AppCompatActivity {
         Button loginButton = findViewById(R.id.saveButton);
         Button signinButton = findViewById(R.id.signinbutton);
         ImageButton backButton = findViewById(R.id.createAccountBackButton);
-
-        // DATABASE
-        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        dr = FirebaseDatabase.getInstance().getReference("User");
 
         //Set Up Previous Intent
         final Intent previousIntent = getIntent();
@@ -87,61 +83,13 @@ public class CreateAccount extends AppCompatActivity {
                         }
                         boolean e = validatePassword(password.getText().toString(),confirmpassword.getText().toString());
                         if (areEmailSectionsValid && e) {
-                            //Authenticate that user is not in database
-                            final String email_final = username.getText().toString();
-                            final String password_final = password.getText().toString();
+                            String email_final = username.getText().toString();
+                            String password_final = password.getText().toString();
 
-                            mAuth.signInWithEmailAndPassword(email_final,password_final).addOnCompleteListener(CreateAccount.this, new OnCompleteListener<AuthResult>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<AuthResult> task) {
-                                            if (task.isSuccessful()) {
-                                                // Sign in success, update UI with the signed-in user's information
-                                                Log.d("CreateAccount.java", "signInWithEmail:success");
-                                                FirebaseUser user = mAuth.getCurrentUser();
-
-                                                //If user is null, that means we can create a new user!
-                                                if (user==null){
-                                                    //Create new user in the authentication table
-                                                    mAuth.createUserWithEmailAndPassword(email_final,password_final).addOnCompleteListener(CreateAccount.this, new OnCompleteListener<AuthResult>() {
-                                                                @Override
-                                                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                                                    if (task.isSuccessful()) {
-                                                                        // Sign in success, update UI with the signed-in user's information
-                                                                        Log.d("CreateAccount.java", "createUserWithEmail:success");
-                                                                        //Create new user in the database table
-                                                                        addUserToDatabase(type,email_final); // ADDING TO DB Separately
-
-                                                                        // Show welcome screen (We can assume that to get to the register screen you must be either
-                                                                        // a service provider or a user
-                                                                        Intent toWelcomeScreen = new Intent(CreateAccount.this,Welcome.class);
-                                                                        toWelcomeScreen.putExtra("user",email_final);
-                                                                        startActivity(toWelcomeScreen);
-
-                                                                    }
-
-                                                                    else {
-                                                                        // If sign in fails, display a message to the user.
-                                                                        Log.w("login.java", "createUserWithEmail:failure", task.getException());
-                                                                        Toast.makeText(CreateAccount.this, "Creation failed.", Toast.LENGTH_SHORT).show();
-                                                                    }
-
-                                                                }
-                                                            });
-
-                                                }
-                                                else{
-                                                    Log.d("CreateAccount.java","User Already exists!");
-                                                }
-
-                                            } else
-                                                {
-                                                // If sign in fails, display a message to the user.
-                                                Log.w("createaccount.java", "signInWithEmail:failure", task.getException());
-                                                Toast.makeText(CreateAccount.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-
-                                            }
-                                        }
-                            });
+                            //Authenticate that user is not in database, then add user to Authentication table and to the database
+                            DatabaseReference dr = FirebaseDatabase.getInstance().getReference("User");
+                            Database creatingAccount = new Database(dr,CreateAccount.this,getApplicationContext());
+                            creatingAccount.registerUser(email_final,password_final,type);
 
                         }
                     }
@@ -181,15 +129,6 @@ public class CreateAccount extends AppCompatActivity {
         else{
             return true;
         }
-    }
-
-
-
-    private void addUserToDatabase(String type,String email) {
-        String id = dr.push().getKey();
-        User user = new User(email, type);
-        dr.child("ListOfUsers").child(id).setValue(user);
-        Toast.makeText(this, "User added", Toast.LENGTH_LONG).show();
     }
 
 }

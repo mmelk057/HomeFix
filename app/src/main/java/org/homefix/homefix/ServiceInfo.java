@@ -12,6 +12,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import static android.os.SystemClock.sleep;
+
+
 public class ServiceInfo extends AppCompatActivity {
 
     @Override
@@ -61,13 +64,10 @@ public class ServiceInfo extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //DB Remove Service Function
-
                 ////////////////////////////
-                Database db = new Database();
+                DatabaseReference dr = FirebaseDatabase.getInstance().getReference("Service").child("Service");
+                Database db = new Database(dr,ServiceInfo.this,getApplicationContext());
                 db.deleteService(name);
-                ////////////////////////////
-
-
                 Intent backToPreviousClass = new Intent(ServiceInfo.this,AdminServices.class);
                 startActivity(backToPreviousClass);
             }
