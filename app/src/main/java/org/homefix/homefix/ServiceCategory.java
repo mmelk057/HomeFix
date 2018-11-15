@@ -12,12 +12,15 @@ public class ServiceCategory {
     }
 
     public String getName(){
+
         return name;
     }
     public double getRate(){
+
         return rate;
     }
     public String getInfo(){
+
         return info;
     }
 }

@@ -63,12 +63,9 @@ public class AddService extends AppCompatActivity {
 
                         //add Service in DB
                         //////////////////////////////
-                        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                        DatabaseReference dr = FirebaseDatabase.getInstance().getReference("Service");
-                        Database db = new Database(dr,nameField,rateField,infoField,AddService.this);
-                        db.addService();
-                        //////////////////////////////
-
+                        DatabaseReference dr = FirebaseDatabase.getInstance().getReference("Service").child("Service");
+                        Database db = new Database(dr,AddService.this,getApplicationContext());
+                        db.addService(nameField.getText().toString(),rateField.getText().toString(),infoField.getText().toString());
 
                         if(prevClass.equals("AdminOptions")){
                             Intent backTrack = new Intent(AddService.this,AdminOptions.class);

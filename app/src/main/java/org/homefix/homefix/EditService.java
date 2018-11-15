@@ -58,17 +58,10 @@ public class EditService extends AppCompatActivity {
                 }
                 else{
                     //DB AUTHENTICATE
-
                     /////////////////
-                    /////////////////
-                    final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                    DatabaseReference dr = FirebaseDatabase.getInstance().getReference("Service");
-                    Database db = new Database(dr,nameField,rateField,infoField,EditService.this);
+                    DatabaseReference dr = FirebaseDatabase.getInstance().getReference("Service").child("Service");
+                    Database db = new Database(dr,EditService.this,getApplicationContext());
                     db.updateService(name,nameField.getText().toString(),Double.parseDouble(rateField.getText().toString()),infoField.getText().toString());
-                    //DB REPLACE INFO
-
-                    /////////////////
-                    /////////////////
 
                     Intent backToServiceinfo = new Intent(EditService.this, ServiceInfo.class);
                     backToServiceinfo.putExtra("name",nameField.getText().toString());

@@ -1,10 +1,13 @@
 package org.homefix.homefix;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.AdapterView;
@@ -32,61 +35,85 @@ import com.google.firebase.database.DatabaseReference;
 
 public class Database extends AppCompatActivity {
 
-    private DatabaseReference dr;
-    private EditText serviceName;
-    private EditText rate;
-    private EditText details;
-    private String type = "";
-    private EditText username;
-    private EditText password;
+    private DatabaseReference firebaseReference;
     private Activity activity;
     private boolean didAuth;
+    private Context currentContext;
 
 
     // CONSTRUCTOR WHEN USING SERVICE
-    public Database(DatabaseReference dr, EditText serviceName, EditText rate, EditText details, Activity activity){
-        this.dr = dr;
-        this.serviceName = serviceName;
-        this.rate = rate;
-        this.details = details;
+    public Database(DatabaseReference firebaseReference, Activity activity, Context currentContext){
+        this.firebaseReference = firebaseReference;
         this.activity = activity;
-        didAuth = false;
-    }
-    public Database(){
-
-    }
-
-    // CONSTRUCTOR WHEN USING USER
-    public Database(DatabaseReference dr, EditText username, EditText password, String type, Activity activity){
-        this.dr = dr;
-        this.type = type;
-        this.username = username;
-        this.password = password;
-        this.activity = activity;
+        this.currentContext = currentContext;
         didAuth = false;
     }
 
-    public void addService() {
-        String id = dr.push().getKey();
-        String _serviceName = serviceName.getText().toString();
-        String _rate = rate.getText().toString();
-        String _details = details.getText().toString();
-        ServiceCategory service = new ServiceCategory(_serviceName,Double.parseDouble(_rate),_details);
-        dr.child("Service").child(id).setValue(service);
-//        Toast.makeText(getApplicationContext(), "Service added", Toast.LENGTH_LONG).show();
+    /**
+     * Adds a specific service to the Service Firebase Directory
+     */
+    public void addService(String serviceName,String serviceRate,String serviceDetails) {
+        String id = firebaseReference.push().getKey();
+        ServiceCategory service = new ServiceCategory(serviceName,Double.parseDouble(serviceRate),serviceDetails);
+        firebaseReference.child(id).setValue(service);
+        Toast.makeText(currentContext, "Service added", Toast.LENGTH_LONG).show();
     }
 
-    public void addUserToDatabase(String type) {
-        String id = dr.push().getKey();
-        String email = username.getText().toString().trim();
-        User user = new User(email, type);
-        dr.child("ListOfUsers").child(id).setValue(user);
-//        Toast.makeText(this, "User added", Toast.LENGTH_LONG).show();
+    /**
+     * Adds a specific user to the User Firebase Directory
+     * @param type A user can be categorized as either a Service Provider, Home Owner or Admin
+     */
+    public void addUserToDatabase(String username,String type) {
+        String id = firebaseReference.push().getKey();
+        User user = new User(username, type);
+        firebaseReference.child("ListOfUsers").child(id).setValue(user);
+        Toast.makeText(currentContext, "User added", Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * Used for backend login authentication for Login.java activity. Verifies user's information matches with Firebase's
+     * @param email User's email
+     * @param password User's password
+     * @param type User's Categorized type
+     */
+    public void loginAuthentication(final String email,final String password,final String type){
+        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d("Login.java", "signInWithEmail:success");
+                    FirebaseUser user = mAuth.getCurrentUser();
 
+                    // If the user is not a null object, that means authentication worked!
+                    if (type.equals("HomeOwner") || type.equals("ServiceProvider")) {
+                        Intent toWelcomePage = new Intent(activity,Welcome.class);
+                        toWelcomePage.putExtra("user",email);
+                        activity.startActivity(toWelcomePage);
+                        //UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder().setDisplayName(type).build(); // DISPLAY NAME IS TYPE.build();
+                    }
+                    else{
+                        Intent toAdminOptions = new Intent(activity,AdminOptions.class);
+                        activity.startActivity(toAdminOptions);
+                    }
+                }
+                else {
+                    // If sign in fails, display a message to the user.
+                    Log.w("Login.java", "signInWithEmail:failure", task.getException());
+                    Toast.makeText(currentContext, "Authentication failed.", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
+    }
+
+    /**
+     * Deletes a Service From the Service Firebase Directory
+     * @param name Name of the Service that is to be deleted
+     */
     public void deleteService(final String name){
-        final DatabaseReference dR = FirebaseDatabase.getInstance().getReference("Service").child("Service");
+        final DatabaseReference dR = firebaseReference;
         dR.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -102,42 +129,92 @@ public class Database extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("Firebase_Error", "onCancelled: "+databaseError.getDetails());
+            }
+        });
+    }
+
+    /**
+     * Creates a new user both the authentication and regular database tables in firebase
+     * @param email User's email
+     * @param password User's password
+     * @param type User's Categorized Type
+     * @param isRegistering Whether or not this function is being used towards registering a user or not. If so, it will
+     *                      start a new activity after adding new user's info to DB. If not, it will simply add user's info
+     *                      to DB
+     */
+    public void createUser(final String email,final String password,final String type,final boolean isRegistering){
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d("CreateAccount.java", "createUserWithEmail:success");
+                    Toast.makeText(currentContext, "Creation Successful.", Toast.LENGTH_SHORT).show();
+                    //Create new user in the database table
+                    addUserToDatabase(email,type); // ADDING TO DB Separately
+
+                    // Show welcome screen (We can assume that to get to the register screen you must be either
+                    // a service provider or a user
+                    if (isRegistering) {
+                        Intent toWelcomeScreen = new Intent(activity, Welcome.class);
+                        toWelcomeScreen.putExtra("user", email);
+                        activity.startActivity(toWelcomeScreen);
+                    }
+                }
+
+                else {
+                    // If sign in fails, display a message to the user.
+                    Log.w("login.java", "createUserWithEmail:failure", task.getException());
+                    Toast.makeText(currentContext, "Creation Unsuccessful.", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
     }
 
 
-    public ArrayList<ServiceCategory> listServices(final String tableName){
-        DatabaseReference dR = FirebaseDatabase.getInstance().getReference("data").child(tableName);
-        final ArrayList<ServiceCategory> services = new ArrayList<ServiceCategory>();
-        dR.addListenerForSingleValueEvent(new ValueEventListener() {
+    /**
+     * Registers a user to the app by adding their information to the Firebase Tables
+     * @param email User's email
+     * @param password User's password
+     * @param type User's Categorized type
+     */
+    public void registerUser(final String email,final String password,final String type){
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot service: dataSnapshot.getChildren()){
-                    String id = service.getKey();
-                    String info = (String)service.child(id).child("info").getValue();
-                    String name = (String)service.child(id).child("name").getValue();
-                    Double rate = Double.parseDouble((String)service.child(id).child("rate").getValue());
-                    if (info!=null && details != null && rate != null) {
-                        ServiceCategory s = new ServiceCategory(name,rate,info);
-                        services.add(s);
-                    }
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d("CreateAccount.java", "signInWithEmail:success");
+                    Toast.makeText(currentContext, "User Already Exists...", Toast.LENGTH_SHORT).show();
+
+                }
+                else {
+                    // If sign in fails, display a message to the user.
+                    Log.w("createaccount.java", "signInWithEmail:failure", task.getException());
+                    Toast.makeText(currentContext, "User Does not Exist...Creating User", Toast.LENGTH_SHORT).show();
+                    //Create new user in the authentication table
+                    createUser(email,password,type,true);
 
                 }
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
         });
-        return services;
     }
 
 
+
+    /**
+     * Updates information on Firebase about a Service
+     * @param oldName User's Old Name (Used to query)
+     * @param newName User's new Name Selection
+     * @param rate User's new Rate Selection
+     * @param details User's new Details Selection
+     */
     public void updateService(final String oldName,final String newName, final double rate, final String details){
-        final DatabaseReference dR = FirebaseDatabase.getInstance().getReference("Service").child("Service");
+        final DatabaseReference dR = firebaseReference;
         dR.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -154,97 +231,66 @@ public class Database extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Log.d("Firebase_Error", "onCancelled: "+databaseError.getDetails());
             }
         });
 
     }
 
-    public boolean authenticate(final FirebaseAuth mAuth, boolean shouldCreateNewOnNotExist){
-        if(shouldCreateNewOnNotExist){
-            createNewUser(mAuth);
-        }
-        String email = username.getText().toString().trim();
-        String _password = password.getText().toString().trim();
-        mAuth.signInWithEmailAndPassword(email, _password).addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
+
+    // TO BE IMPLEMENTED LATER -------------------------------
+
+
+    // DELETING A USER FROM DATABASE AND AUTHENTICATION TABLE
+
+
+    // -------------------------------------------------------
+
+
+    /**
+     * Lists all service objects in the database onto a ListView Object (Intended for AdminServices.java)
+     * @param listViewId reference to the Listview object to which you would want the information to be stored on
+     */
+    public void listServices(final int listViewId){
+        DatabaseReference dR = firebaseReference;
+        dR.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                finish();
+//                activity.startActivity(activity.getIntent());
+                ArrayList<ServiceCategory> services = new ArrayList<>();
+                for(DataSnapshot service: dataSnapshot.getChildren()){
+                    String info = (String)service.child("info").getValue();
+                    String name = (String)service.child("name").getValue();
+                    String rate = Long.toString((long)service.child("rate").getValue());
+                    if (info!=null && name!= null && rate != null) {
+                        ServiceCategory s = new ServiceCategory(name,Double.parseDouble(rate),info);
+                        services.add(s);
+                    }
+                }
+                ServiceListAdapter adapt = new ServiceListAdapter(currentContext,R.layout.service_list_layout,services);
+                ListView serviceList = activity.findViewById(listViewId);
+                serviceList.setAdapter(adapt);
+                serviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            setdidAuth(true);
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("-", "signInWithEmail:success");
-                            //updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("-", "signInWithEmail:failure", task.getException());
-                            //updateUI(null);
-                        }
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent toServiceInfo = new Intent(activity,ServiceInfo.class);
+                        ServiceCategory sc = (ServiceCategory) view.getTag();
+                        toServiceInfo.putExtra("name",sc.getName());
+                        toServiceInfo.putExtra("rate",String.valueOf(sc.getRate()));
+                        toServiceInfo.putExtra("info",sc.getInfo());
+                        activity.startActivity(toServiceInfo);
                     }
                 });
-        return true;
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("Firebase_Error", "onCancelled: "+databaseError.getDetails());
+            }
+        });
+
     }
-
-    void setdidAuth(boolean value){
-        this.didAuth = value;
-    }
-
-    boolean getdidAuth(){
-        return didAuth;
-    }
-
-    private boolean createNewUser(final FirebaseAuth mAuth){
-        String email = username.getText().toString().trim();
-        String _password = password.getText().toString().trim();
-        mAuth.createUserWithEmailAndPassword(email, _password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            didAuth = true;
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("-", "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            //updateUI(user);
-                            addUserToDatabase(type); // ADDING TO DB Separately
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("-", "createUserWithEmail:failure", task.getException());
-                            //updateUI(null);
-                        }
-                    }
-                });
-        return true;
-    }
-
-//    private void updateUser(final String email, String password, String type){
-//        DatabaseReference dR = FirebaseDatabase.getInstance().getReference("ListOfUsers");
-//        dR.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for(DataSnapshot user: dataSnapshot.getChildren()){
-//                    String tempUsername = (String)user.child("email").getValue();
-//                    if (tempUsername.equals(email)) {
-//                        userNames.add(tempUsername);
-//                    }
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//        User user = new User(email,type);
-//        dR.setValue(service);
-//        Toast.makeText(getApplicationContext(),"User updated",Toast.LENGTH_LONG).show();
-//    }
-
-//    private boolean deleteUser(String id){
-//        DatabaseReference dR = FirebaseDatabase.getInstance().getReference("ListOfUsers").child(id);
-//        dR.removeValue();
-//        Toast.makeText(getApplicationContext(),"User deleted",Toast.LENGTH_LONG).show();
-//        return true;
-//    }
 
 }
