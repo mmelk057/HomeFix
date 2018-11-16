@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">HomeFix</string>
     <color name="beige">#fff0c7</color>
+    <string name="times"><u>Current Selected Times</u></string>
     <color name="button">#009FB7</color>
     <string name="login">Login</string>
     <string name="L">Login</string>
