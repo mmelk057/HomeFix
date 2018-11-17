@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/beige">
 
     <ImageButton
@@ -24,9 +25,9 @@
         android:id="@+id/profile_avatar"
         android:layout_width="match_parent"
         android:layout_height="128dp"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="167dp"
+        android:layout_marginTop="116dp"
         app:srcCompat="@android:drawable/sym_def_app_icon" />
 
     <LinearLayout
@@ -147,23 +148,20 @@
                 android:text="Liscenced:"
                 android:textAlignment="center"/>
 
-            <Button
-                android:id="@+id/profile_yes_button"
+            <CheckBox
+                android:id="@+id/yes_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:padding="5dp"
-                android:paddingRight="5dp"
                 android:text="Yes" />
 
-            <Button
-                android:id="@+id/profile_no_button"
+            <CheckBox
+                android:id="@+id/no_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:padding="5dp"
-                android:paddingLeft="5dp"
                 android:text="No" />
+
         </LinearLayout>
 
     </LinearLayout>

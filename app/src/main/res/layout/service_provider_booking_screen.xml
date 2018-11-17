@@ -3,7 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/beige">
+
+    <Button
+        android:id="@+id/booking_screen_sign_out_button"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="99dp"
+        android:layout_height="52dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/x"
+        android:text="@string/sign_out" />
 
     <Button
         android:id="@+id/service_provider_profile_button"
@@ -33,21 +46,6 @@
         android:textAllCaps="true"
         android:textFontWeight="18"
         android:textStyle="bold" />
-
-    <ImageButton
-        android:id="@+id/service_provider_booking_back_button"
-        style="@style/Widget.AppCompat.ImageButton"
-        tools:srcCompat="?attr/homeAsUpIndicator"
-        android:layout_width="65dp"
-        android:layout_height="42dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="11dp"
-        android:layout_marginTop="12dp"
-        android:adjustViewBounds="false"
-        android:background="#FFF0c7"
-        android:cropToPadding="false"
-        app:srcCompat="?attr/actionModeCloseDrawable" />
 
     <LinearLayout
         android:layout_width="match_parent"

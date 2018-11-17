@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.AdapterView;
@@ -28,7 +30,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 import com.google.firebase.database.DatabaseReference;
@@ -64,10 +68,189 @@ public class Database extends AppCompatActivity {
      * @param type A user can be categorized as either a Service Provider, Home Owner or Admin
      */
     public void addUserToDatabase(String username,String type) {
-        String id = firebaseReference.push().getKey();
-        User user = new User(username, type);
-        firebaseReference.child("ListOfUsers").child(id).setValue(user);
-        Toast.makeText(currentContext, "User added", Toast.LENGTH_LONG).show();
+        //Add HomeOwner User
+        if (type.equals("HomeOwner")){
+            String id = firebaseReference.push().getKey();
+            User user = new User(username, type);
+            firebaseReference.child("ListOfUsers").child(id).setValue(user);
+            Toast.makeText(currentContext, "HomeOwner added", Toast.LENGTH_LONG).show();
+        }
+        //Add Service Provider User
+        else {
+            String id = firebaseReference.push().getKey();
+            ServiceProvider sp = new ServiceProvider(username);
+            firebaseReference.child("ServiceProvider").child(id).setValue(sp);
+            firebaseReference.child("ServiceProvider").child(id).child("Availability").push().child("Time").setValue("");
+            String bookingId = firebaseReference.child("ServiceProvider").child(id).child("CurrentBookings").push().getKey();
+            firebaseReference.child("ServiceProvider").child(id).child("CurrentBookings").child(bookingId).child("Name").setValue("");
+            firebaseReference.child("ServiceProvider").child(id).child("CurrentBookings").child(bookingId).child("Time").setValue("");
+            Toast.makeText(currentContext, "Service Provider added", Toast.LENGTH_LONG).show();
+            String reviewsId = firebaseReference.child("ServiceProvider").child(id).child("Reviews").push().getKey();
+            firebaseReference.child("ServiceProvider").child(id).child("Reviews").child(reviewsId).child("Name").setValue("");
+            firebaseReference.child("ServiceProvider").child(id).child("Reviews").child(reviewsId).child("Rating").setValue("");
+            String servicesId = firebaseReference.child("ServiceProvider").child(id).child("Services").push().getKey();
+            firebaseReference.child("ServiceProvider").child(id).child("Services").child(servicesId).child("name").setValue("");
+            firebaseReference.child("ServiceProvider").child(id).child("Services").child(servicesId).child("rate").setValue("");
+            firebaseReference.child("ServiceProvider").child(id).child("Services").child(servicesId).child("info").setValue("");
+        }
+    }
+
+    /**
+     * Queries a user based on his/her email, then adds an availability under his/her account
+     * @param time Availability to be added
+     * @param email Email that implements Comparable inferface that is used in query
+     */
+    public void findUserAndAddAvailability(final String time,final String email){
+        final DatabaseReference dr = firebaseReference;
+        dr.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot user:dataSnapshot.getChildren()){
+                    String tempUser = (String)user.child("email").getValue();
+                    try {
+                        if (tempUser.equals(email)) {
+                            addAvailability(user.getKey(),time);
+                        }
+                    }
+                    catch(NullPointerException e){
+                        continue;
+                    }
+                }
+                dr.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("Firebase_Error", "onCancelled: "+databaseError.getDetails());
+            }
+        });
+    }
+
+    /**
+     * Adds an availability entry to a service provider's account based on his/her account key
+     * @param guid global unique identifier
+     * @param time availability that is to be added
+     */
+    public void addAvailability(final String guid,final String time){
+        final DatabaseReference dR = firebaseReference.child(guid).child("Availability");
+        dR.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                boolean isAlreadyInList = false;
+                for(DataSnapshot currentElem: dataSnapshot.getChildren()){
+                    if ((currentElem.child("Time").getValue()).equals(time)) {
+                         isAlreadyInList=true;
+                         break;
+                    }
+                }
+                if (!isAlreadyInList){
+                    firebaseReference.child(guid).child("Availability").push().child("Time").setValue(time);
+                }
+                dR.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("Firebase_Error", "onCancelled: "+databaseError.getDetails());
+            }
+        });
+    }
+
+
+
+    /**
+     * Seeks for a user by email, then proceeds to list out his/her availabilities
+     * @param listViewId identification integer for listview component to which the availability values will be listed on
+     * @param email user's email that will be used in querying the database
+     */
+    public void findUserAndListAvailablities(final int listViewId,final String email){
+        firebaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot user:dataSnapshot.getChildren()){
+                    String tempUser = (String)user.child("email").getValue();
+                    try {
+                        if (tempUser.equals(email)) {
+                            listAvailabilities(listViewId,user.getKey());
+                            break;
+                        }
+                    }
+                    catch(NullPointerException e){
+                        continue;
+                    }
+                }
+                firebaseReference.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("Firebase_Error", "onCancelled: "+databaseError.getDetails());
+            }
+        });
+    }
+
+
+
+    /**
+     * Lists all the availabilities onto a listview using a a guid to locate the user
+     * @param listViewId identification integer for listview component to which the availability values will be listed on
+     * @param guid global unique identifier
+     */
+    public void listAvailabilities(final int listViewId,final String guid){
+        final DatabaseReference dR = firebaseReference.child(guid).child("Availability");
+        dR.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<String> availabilities = new ArrayList<>();
+                for(DataSnapshot currentElem: dataSnapshot.getChildren()){
+                    if (!((String)currentElem.child("Time").getValue()).equals("")) {
+                        availabilities.add((String) currentElem.child("Time").getValue());
+                    }
+                }
+                AvailabilityListAdapter adapt = new AvailabilityListAdapter(currentContext,R.layout.simple_drop_list_layout,availabilities);
+                ListView serviceList = activity.findViewById(listViewId);
+                serviceList.setAdapter(adapt);
+                serviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        String time = (String)view.getTag();
+                        findAndDeleteAvailability(time,guid);
+                    }
+                });
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("Firebase_Error", "onCancelled: "+databaseError.getDetails());
+            }
+        });
+    }
+
+
+    public void findAndDeleteAvailability(final String time, final String guid){
+        final DatabaseReference dR = FirebaseDatabase.getInstance().getReference("User").child("ServiceProvider").child(guid).child("Availability");
+        dR.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot timeEntries: dataSnapshot.getChildren()){
+                    if(((String)timeEntries.child("Time").getValue()).equals(time)){
+                        deleteAvailability(guid,timeEntries.getKey());
+                        break;
+                    }
+                }
+                dR.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("Firebase_Error", "onCancelled: "+databaseError.getDetails());
+            }
+        });
+    }
+
+    public void deleteAvailability(String guid,String guidV2){
+        FirebaseDatabase.getInstance().getReference("User").child("ServiceProvider").child(guid).child("Availability").child(guidV2).removeValue();
     }
 
     /**
@@ -87,11 +270,16 @@ public class Database extends AppCompatActivity {
                     FirebaseUser user = mAuth.getCurrentUser();
 
                     // If the user is not a null object, that means authentication worked!
-                    if (type.equals("HomeOwner") || type.equals("ServiceProvider")) {
+                    if (type.equals("HomeOwner")) {
                         Intent toWelcomePage = new Intent(activity,Welcome.class);
                         toWelcomePage.putExtra("user",email);
                         activity.startActivity(toWelcomePage);
                         //UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder().setDisplayName(type).build(); // DISPLAY NAME IS TYPE.build();
+                    }
+                    else if(type.equals("ServiceProvider")){
+                        Intent spMainPage = new Intent(activity,ServiceProviderMain.class);
+                        spMainPage.putExtra("user",email);
+                        activity.startActivity(spMainPage);
                     }
                     else{
                         Intent toAdminOptions = new Intent(activity,AdminOptions.class);
@@ -119,11 +307,15 @@ public class Database extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot service: dataSnapshot.getChildren()){
                     String tmpService = (String)service.child("name").getValue();
-                    if (tmpService.equals(name)) {
-                        dR.child(service.getKey()).removeValue(); // SHOULD REMOVE SERVICE
-                        break;
+                    try {
+                        if (tmpService.equals(name)) {
+                            dR.child(service.getKey()).removeValue(); // SHOULD REMOVE SERVICE
+                            break;
+                        }
                     }
-
+                    catch(NullPointerException e){
+                        continue;
+                    }
                 }
             }
 
@@ -158,9 +350,16 @@ public class Database extends AppCompatActivity {
                     // Show welcome screen (We can assume that to get to the register screen you must be either
                     // a service provider or a user
                     if (isRegistering) {
-                        Intent toWelcomeScreen = new Intent(activity, Welcome.class);
-                        toWelcomeScreen.putExtra("user", email);
-                        activity.startActivity(toWelcomeScreen);
+                        if (type.equals("HomeOwner")) {
+                            Intent toWelcomeScreen = new Intent(activity, Welcome.class);
+                            toWelcomeScreen.putExtra("user", email);
+                            activity.startActivity(toWelcomeScreen);
+                        }
+                        else{
+                            Intent spMainPage = new Intent(activity,ServiceProviderMain.class);
+                            spMainPage.putExtra("user",email);
+                            activity.startActivity(spMainPage);
+                        }
                     }
                 }
 
@@ -256,8 +455,6 @@ public class Database extends AppCompatActivity {
         dR.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                finish();
-//                activity.startActivity(activity.getIntent());
                 ArrayList<ServiceCategory> services = new ArrayList<>();
                 for(DataSnapshot service: dataSnapshot.getChildren()){
                     String info = (String)service.child("info").getValue();
@@ -290,6 +487,265 @@ public class Database extends AppCompatActivity {
                 Log.d("Firebase_Error", "onCancelled: "+databaseError.getDetails());
             }
         });
+
+    }
+
+
+    public void listAllOfferedServices(final int listViewId,final String email){
+        DatabaseReference dR = firebaseReference;
+        dR.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<ServiceCategory> services = new ArrayList<>();
+                for(DataSnapshot service: dataSnapshot.getChildren()){
+                    String info = (String)service.child("info").getValue();
+                    String name = (String)service.child("name").getValue();
+                    String rate = Long.toString((long)service.child("rate").getValue());
+                    if (info!=null && name!= null && rate != null) {
+                        ServiceCategory s = new ServiceCategory(name,Double.parseDouble(rate),info);
+                        services.add(s);
+                    }
+                }
+                ServiceListAdapter adapt = new ServiceListAdapter(currentContext,R.layout.service_list_layout,services);
+                ListView serviceList = activity.findViewById(listViewId);
+                serviceList.setAdapter(adapt);
+                serviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        ServiceCategory sc = (ServiceCategory) view.getTag();
+                        findProviderThenAddService(sc,email);
+                    }
+                });
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("Firebase_Error", "onCancelled: "+databaseError.getDetails());
+            }
+        });
+    }
+
+    public void findProviderThenAddService(final ServiceCategory sc,final String email){
+        final DatabaseReference dR = FirebaseDatabase.getInstance().getReference("User").child("ServiceProvider");
+        dR.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot user:dataSnapshot.getChildren()){
+                    String tempUser = (String)user.child("email").getValue();
+                    try {
+                        if (tempUser.equals(email)) {
+                            addServiceForProvider(sc,user.getKey());
+                            break;
+                        }
+                    }
+                    catch(NullPointerException e){
+                        continue;
+                    }
+                }
+                dR.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("Firebase_Error", "onCancelled: "+databaseError.getDetails());
+            }
+        });
+    }
+
+    public void addServiceForProvider(final ServiceCategory sc, final String guid){
+        final DatabaseReference dR = FirebaseDatabase.getInstance().getReference("User").child("ServiceProvider").child(guid).child("Services");
+        dR.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                boolean isAlreadyInList = false;
+                for(DataSnapshot currentElem: dataSnapshot.getChildren()){
+                    if ((currentElem.child("name").getValue()).equals(sc.getName())) {
+                        isAlreadyInList=true;
+                        break;
+                    }
+                }
+                if (!isAlreadyInList){
+                    dR.push().setValue(sc);
+                }
+                dR.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("Firebase_Error", "onCancelled: "+databaseError.getDetails());
+            }
+        });
+
+    }
+
+
+    public void findServiceProviderThenListServices(final int listViewId,final String email){
+        final DatabaseReference dR = FirebaseDatabase.getInstance().getReference("User").child("ServiceProvider");
+        dR.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot user:dataSnapshot.getChildren()){
+                    String tempUser = (String)user.child("email").getValue();
+                    try {
+                        if (tempUser.equals(email)) {
+                            listServicesForServiceProvider(listViewId,user.getKey());
+                            break;
+                        }
+                    }
+                    catch(NullPointerException e){
+                        continue;
+                    }
+                }
+                dR.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("Firebase_Error", "onCancelled: "+databaseError.getDetails());
+            }
+        });
+    }
+
+    public void listServicesForServiceProvider(final int listViewId,final String guid){
+        DatabaseReference dR = FirebaseDatabase.getInstance().getReference("User").child("ServiceProvider").child(guid).child("Services");
+        dR.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<ServiceCategory> services = new ArrayList<>();
+                for(DataSnapshot service: dataSnapshot.getChildren()){
+                    String info = (String)service.child("info").getValue();
+                    String name = (String)service.child("name").getValue();
+                    String rate = String.valueOf(service.child("rate").getValue());
+                    if (!(info.equals("")) && !(name.equals("")) && !(rate.equals(""))) {
+                        ServiceCategory s = new ServiceCategory(name,Double.parseDouble(rate),info);
+                        services.add(s);
+                    }
+                }
+                ServiceListAdapter adapt = new ServiceListAdapter(currentContext,R.layout.service_list_layout,services);
+                ListView serviceList = activity.findViewById(listViewId);
+                serviceList.setAdapter(adapt);
+                serviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        ServiceCategory sc = (ServiceCategory)view.getTag();
+                        deleteServiceProviderService(sc.getName(),guid);
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("Firebase_Error", "onCancelled: "+databaseError.getDetails());
+            }
+        });
+    }
+
+    public void deleteServiceProviderService(final String serviceName, String guid){
+        final DatabaseReference dR = FirebaseDatabase.getInstance().getReference("User").child("ServiceProvider").child(guid).child("Services");
+        dR.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot service: dataSnapshot.getChildren()){
+                    String tmpService = (String)service.child("name").getValue();
+                    try {
+                        if (tmpService.equals(serviceName)) {
+                            dR.child(service.getKey()).removeValue(); // SHOULD REMOVE SERVICE
+                            break;
+                        }
+                    }
+                    catch(NullPointerException e){
+                        continue;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("Firebase_Error", "onCancelled: "+databaseError.getDetails());
+            }
+        });
+    }
+
+    public void findAndUpdateServiceProvider(final String email){
+        firebaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot user:dataSnapshot.getChildren()){
+                    String tempUser = (String)user.child("email").getValue();
+                    try {
+                        if (tempUser.equals(email)) {
+                            updateServiceProvider(email,user.getKey());
+                            break;
+                        }
+                    }
+                    catch(NullPointerException e){
+                        continue;
+                    }
+                }
+                firebaseReference.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("Firebase_Error", "onCancelled: "+databaseError.getDetails());
+            }
+        });
+    }
+
+    public void updateServiceProvider(final String email,final String guid){
+        EditText nameField = activity.findViewById(R.id.modify_profile_name);
+        EditText addressField = activity.findViewById(R.id.modify_profile_address);
+        EditText phoneNumberField=activity.findViewById(R.id.modify_phone_number);
+        EditText descField =activity.findViewById(R.id.modify_profile_description);
+        CheckBox yesCheck = activity.findViewById(R.id.yes_checkbox);
+        CheckBox noCheck = activity.findViewById(R.id.no_checkbox);
+
+        if (nameField.getText().toString().equals("")|| addressField.getText().toString().equals("")||phoneNumberField.getText().toString().equals("")||descField.getText().toString().equals("")){
+            //Print Error Message
+            Toast nullErrorMessage = Toast.makeText(currentContext,"Error: One or more fields are null",Toast.LENGTH_LONG);
+            nullErrorMessage.show();
+            //TOAST MESSAGE
+
+            //WORK ON MAKING A CUSTOM TOAST MESSAGE WITH CUSTOM LAYOUT (!!)
+        }
+        else{
+            if(yesCheck.isChecked()||noCheck.isChecked()){
+                Map<String,Object> updates= new HashMap<>();
+                updates.put("companyName",nameField.getText().toString());
+                updates.put("companyAddress",addressField.getText().toString());
+                updates.put("companyPhoneNumber",phoneNumberField.getText().toString());
+                updates.put("companyDescription",descField.getText().toString());
+                if (yesCheck.isChecked()){
+                    updates.put("liscenced",true);
+                }
+                else{
+                    updates.put("liscenced",false);
+                }
+
+                FirebaseDatabase.getInstance().getReference("User").child("ServiceProvider").child(guid).updateChildren(updates);
+                nameField.setHint(nameField.getText().toString());
+                addressField.setHint(addressField.getText().toString());
+                phoneNumberField.setHint(phoneNumberField.getText().toString());
+                descField.setHint(descField.getText().toString());
+                Intent previousIntent = activity.getIntent();
+                Intent restartActivity = new Intent(activity,ServiceProviderProfilePage.class);
+                restartActivity.putExtra("user",previousIntent.getStringExtra("user"));
+                restartActivity.putExtra("name",nameField.getText().toString());
+                restartActivity.putExtra("address",addressField.getText().toString());
+                restartActivity.putExtra("desc",descField.getText().toString());
+                restartActivity.putExtra("phoneNumber",descField.getText().toString());
+                activity.startActivity(restartActivity);
+            }
+            else{
+                Toast isLiscencedIsNotFilled = Toast.makeText(currentContext,"Error: Please check one of the boxes",Toast.LENGTH_LONG);
+                isLiscencedIsNotFilled.show();
+            }
+        }
+
+
 
     }
 
