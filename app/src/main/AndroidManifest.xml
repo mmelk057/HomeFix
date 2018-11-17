@@ -43,6 +43,15 @@
             android:exported="true"/>
         <activity android:name=".ServiceInfo"
             android:exported="true"/>
+        <activity android:name=".ServiceProviderMain"
+            android:exported="true"></activity>
+        <activity android:name=".ServiceProviderAvailabilityPage"
+            android:exported="true"></activity>
+        <activity android:name=".ServiceProviderProfilePage"
+            android:exported="true"></activity>
+        <activity android:name=".ServiceProviderSeviceSelectionPage"
+            android:exported="true"
+            ></activity>
     </application>
     <!--android:exported="true" allows app to run specified activity-->
 </manifest>
