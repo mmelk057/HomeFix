@@ -26,7 +26,6 @@
         <activity
             android:name=".Welcome"
             android:label="@string/title_activity_welcome" />
-        <activity android:name=".WelcomeAdmin" />
         <activity android:name=".AdminServices"
             android:exported="true"/>
         <activity android:name=".EditService"
