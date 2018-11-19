@@ -173,7 +173,7 @@ public class CreateAccount extends AppCompatActivity {
 
     }
 
-    private boolean validatePassword(String pass1, String pass2){
+    public boolean validatePassword(String pass1, String pass2){
         if(!pass1.equals(pass2)){
             Toast.makeText(this, "Passwords entered do not match!", Toast.LENGTH_LONG);
             return false;

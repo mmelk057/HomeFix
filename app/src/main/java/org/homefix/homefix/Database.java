@@ -184,11 +184,11 @@ public class Database extends AppCompatActivity {
         return true;
     }
 
-    void setdidAuth(boolean value){
+    public boolean setdidAuth(boolean value){
         this.didAuth = value;
     }
 
-    boolean getdidAuth(){
+    public boolean getdidAuth(){
         return didAuth;
     }
 
