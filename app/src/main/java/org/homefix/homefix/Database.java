@@ -43,6 +43,8 @@ public class Database extends AppCompatActivity {
     private Activity activity;
     private boolean didAuth;
     private Context currentContext;
+    private ArrayList<String> allActivities;
+    private int allActivitiesLength;
 
 
     // CONSTRUCTOR WHEN USING SERVICE
@@ -51,6 +53,29 @@ public class Database extends AppCompatActivity {
         this.activity = activity;
         this.currentContext = currentContext;
         didAuth = false;
+    }
+
+    public Database(DatabaseReference firebaseReference) {
+        this.firebaseReference=firebaseReference;
+        allActivitiesLength=0;
+    }
+
+    public boolean getDidAuth(){
+        return getDidAuth();
+    }
+
+
+    public void setDidAuth(boolean auth){
+        didAuth=auth;
+    }
+
+    public boolean validatePassword(String pass1, String pass2){
+        if(!pass1.equals(pass2)){
+            return false;
+        }
+        else{
+            return true;
+        }
     }
 
     /**
@@ -124,6 +149,13 @@ public class Database extends AppCompatActivity {
                 Log.d("Firebase_Error", "onCancelled: "+databaseError.getDetails());
             }
         });
+    }
+
+    public String addToActivities(String input){
+        allActivitiesLength+=1;
+        String activitiesInput = input+":Activity"+allActivitiesLength;
+        allActivities.add(activitiesInput);
+        return activitiesInput;
     }
 
     /**
