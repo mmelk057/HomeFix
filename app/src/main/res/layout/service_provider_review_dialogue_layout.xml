@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/beige">
+
+    <TextView
+        android:id="@+id/rating_label"
+        android:layout_width="95dp"
+        android:layout_height="31dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="132dp"
+        android:text="Rating:"
+        android:textSize="20sp"/>
+
+    <EditText
+        android:id="@+id/comment_input_edit_text_box"
+        android:layout_width="268dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/comment_label"
+        android:layout_toEndOf="@id/comment_label"
+        android:layout_toRightOf="@id/comment_label"
+        android:hint="[Comment]" />
+
+    <EditText
+        android:id="@+id/rating_input_edit_text_box"
+        android:layout_width="268dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/rating_label"
+        android:layout_toEndOf="@+id/comment_label"
+        android:layout_toRightOf="@id/comment_label"
+        android:hint="[Rate]" />
+
+    <TextView
+        android:id="@+id/comment_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/rating_label"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/rating_label"
+        android:layout_marginLeft="-11dp"
+        android:layout_marginStart="-11dp"
+        android:layout_marginTop="188dp"
+        android:text="Comment:"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/service_provider_name_label"
+        android:layout_width="324dp"
+        android:layout_height="63dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="46dp"
+        android:layout_marginLeft="46dp"
+        android:layout_marginTop="37dp"
+        android:text="[Service Provider Name]"
+        android:gravity="center_vertical"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:textStyle="bold"/>
+</RelativeLayout>
