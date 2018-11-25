@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
+    <!-- android:exported="true" allows app to run specified activity -->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -14,7 +15,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,32 +26,42 @@
         <activity
             android:name=".Welcome"
             android:label="@string/title_activity_welcome" />
-        <activity android:name=".AdminServices"
-            android:exported="true"/>
-        <activity android:name=".EditService"
-            android:exported="true"/>
+        <activity
+            android:name=".AdminServices"
+            android:exported="true" />
+        <activity
+            android:name=".EditService"
+            android:exported="true" />
         <activity
             android:name=".AdminOptions"
-            android:exported="true"
-            ></activity>
-        <activity android:name=".ServiceDetails"
-            android:exported="true"></activity>
+            android:exported="true" />
+        <activity
+            android:name=".ServiceDetails"
+            android:exported="true" />
         <activity
             android:name=".CreateAccount"
             android:exported="true" />
-        <activity android:name=".AddService"
-            android:exported="true"/>
-        <activity android:name=".ServiceInfo"
-            android:exported="true"/>
-        <activity android:name=".ServiceProviderMain"
-            android:exported="true"></activity>
-        <activity android:name=".ServiceProviderAvailabilityPage"
-            android:exported="true"></activity>
-        <activity android:name=".ServiceProviderProfilePage"
-            android:exported="true"></activity>
-        <activity android:name=".ServiceProviderSeviceSelectionPage"
-            android:exported="true"
-            ></activity>
+        <activity
+            android:name=".AddService"
+            android:exported="true" />
+        <activity
+            android:name=".ServiceInfo"
+            android:exported="true" />
+        <activity
+            android:name=".ServiceProviderMain"
+            android:exported="true" />
+        <activity
+            android:name=".ServiceProviderAvailabilityPage"
+            android:exported="true" />
+        <activity
+            android:name=".ServiceProviderProfilePage"
+            android:exported="true" />
+        <activity
+            android:name=".ServiceProviderSeviceSelectionPage"
+            android:exported="true" />
+        <activity android:name=".Write_A_Review" />
+        <activity android:name=".All_Availabilities" />
+        <activity android:name=".all_current_bookings"></activity>
     </application>
-    <!--android:exported="true" allows app to run specified activity-->
+
 </manifest>
