@@ -40,5 +40,8 @@
     <string name="hint_email">email</string>
     <string name="Review_Backbutton">TODO</string>
     <string name="all_availabilities">All Availabilities</string>
+    <string name="All_Availabilities_Back">TODO</string>
+    <string name="list_of_currently_offered_services">List of currently offered Services</string>
+    <string name="Current_bookings_back">TODO</string>
 
 </resources>

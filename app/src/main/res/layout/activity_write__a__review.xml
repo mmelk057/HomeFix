@@ -103,7 +103,8 @@
         android:hint="@string/hint_email"
         android:inputType="textEmailAddress"
         android:textSize="14sp"
-        app:fontFamily="@font/x" />
+        app:fontFamily="@font/x"
+        android:autofillHints="" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -118,7 +119,8 @@
         android:hint="@string/out_of_5"
         android:textSize="14sp"
         android:inputType=""
-        app:fontFamily="@font/x" />
+        app:fontFamily="@font/x"
+        android:autofillHints="" />
 
     <EditText
         android:id="@+id/editText"
@@ -134,7 +136,8 @@
         android:hint="@string/your_thoughts"
         android:inputType="textMultiLine"
         android:textSize="14sp"
-        app:fontFamily="@font/x" />
+        app:fontFamily="@font/x"
+        android:autofillHints="" />
 
     <ImageButton
         android:id="@+id/review_Backbutton"

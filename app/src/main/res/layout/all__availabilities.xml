@@ -34,7 +34,6 @@
             android:id="@+id/timesview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignTop="@+id/timesview"
             android:scrollbars="vertical" />
     </LinearLayout>
 
@@ -53,6 +52,7 @@
         android:background="#FFF0c7"
         android:cropToPadding="false"
         app:srcCompat="?attr/actionModeCloseDrawable"
-        tools:srcCompat="?attr/homeAsUpIndicator" />
+        tools:srcCompat="?attr/homeAsUpIndicator"
+        android:contentDescription="@string/All_Availabilities_Back" />
 
 </RelativeLayout>
