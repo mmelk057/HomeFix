@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".all_current_bookings"
+    android:background="@color/beige">
+
+
+    <LinearLayout
+        android:layout_width="360dp"
+        android:layout_height="450dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="22dp"
+        android:layout_marginLeft="22dp"
+        android:layout_marginTop="127dp"
+        android:orientation="vertical">
+
+        <ListView
+            android:id="@+id/offered_Services"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@+id/null"
+            android:scrollbars="vertical" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/Offered_Services"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="69dp"
+        android:text="List of currently offered Services"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textSize="18sp"
+        app:fontFamily="@font/x" />
+
+    <ImageButton
+        android:id="@+id/current_bookings_back"
+        style="@style/Widget.AppCompat.ImageButton"
+        android:layout_width="65dp"
+        android:layout_height="42dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="5dp"
+        android:adjustViewBounds="false"
+        android:background="#FFF0c7"
+        android:cropToPadding="false"
+        app:srcCompat="?attr/actionModeCloseDrawable"
+        tools:srcCompat="?attr/homeAsUpIndicator" />
+
+</RelativeLayout>
