@@ -16,7 +16,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="251dp"
-        android:layout_below="@+id/textView4"
+        android:layout_below="@+id/Review_Rating"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentEnd="true"
@@ -50,10 +50,10 @@
 
     <!--this is the rating of the Rating-->
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/Review_Rating"
         android:layout_width="wrap_content"
         android:layout_height="36dp"
-        android:layout_below="@+id/textView5"
+        android:layout_below="@+id/Review"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentEnd="true"
@@ -69,7 +69,7 @@
 
     <!--this is the rate or price of the service -->
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/Review"
         android:layout_width="wrap_content"
         android:layout_height="33dp"
         android:layout_below="@+id/textView3"
