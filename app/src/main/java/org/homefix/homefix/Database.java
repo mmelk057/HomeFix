@@ -47,7 +47,6 @@ public class Database extends AppCompatActivity {
     private int allActivitiesLength;
 
 
-    // CONSTRUCTOR WHEN USING SERVICE
     public Database(DatabaseReference firebaseReference, Activity activity, Context currentContext){
         this.firebaseReference = firebaseReference;
         this.activity = activity;
@@ -55,6 +54,7 @@ public class Database extends AppCompatActivity {
         didAuth = false;
     }
 
+    //DONT WORRY ABOUT THIS
     public Database(DatabaseReference firebaseReference) {
         this.firebaseReference=firebaseReference;
         allActivitiesLength=0;

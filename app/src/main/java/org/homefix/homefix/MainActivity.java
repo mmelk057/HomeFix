@@ -30,9 +30,9 @@ public class MainActivity extends AppCompatActivity {
         adminButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent toLogin = new Intent(MainActivity.this,Login.class);
-                toLogin.putExtra("type","admin");
-                startActivity(toLogin);
+                Intent toLogin = new Intent(MainActivity.this,Login.class); //Navigation tool to go from one activity to another. Params: {Activity from, Activity To}
+                toLogin.putExtra("type","admin"); //Extra information to add during navigation from one activity to another
+                startActivity(toLogin); //starting an intent!
             }
         });
 
