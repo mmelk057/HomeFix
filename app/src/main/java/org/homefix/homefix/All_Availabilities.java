@@ -11,6 +11,6 @@ public class All_Availabilities extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.all__availabilities);
 
-        
+
     }
 }
