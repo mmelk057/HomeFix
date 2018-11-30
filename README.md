@@ -1,5 +1,8 @@
 # HomeFix
 
+Build Status
+[![Build Status](https://circleci.com/gh/FaizChishtie/HomeFix.png?branch=master)](https://circleci.com/gh/FaizChishtie/HomeFix)
+
 swapp
 
 Team Members:
@@ -17,7 +20,7 @@ Sy Rajeswaran, 300005333
 
 Description of Project:
 
-*insert here*
+HomeFix is a new application that revolutionizes the home-servicing experience. Whether it’s a leaky faucet, a broken door, shattered window, or a crooked countertop, our expert service providers will save the day! We guarantee that our certified professionals, who have have been rated and reviewed by other HomeFix users, will satisfy. Our system administrator creates services based on their demand from homeowners to ensure that we only offer you the services you require. From the given services, service providers select their speciality, and await approval by our administrator to guarantee authenticity. Search for specific services, select your preferred service provider, book a time, and like that, your home is fixed. Download HomeFix today, and let us do the work.
 
 Troubleshooting:
 

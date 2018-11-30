@@ -33,11 +33,13 @@ public class AddService extends AppCompatActivity {
         Intent prevIntent = getIntent();
         final String prevClass = prevIntent.getStringExtra("previousClass");
 
+
+        //create a listener for the back button
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(prevClass.equals("AdminOptions")){
-                    Intent backTrack = new Intent(AddService.this,AdminOptions.class);
+                if(prevClass.equals("AdminOptions")){ //IF THE VALUE OF THE PREVIOUS INTENT EXTRA IS "XXX"
+                    Intent backTrack = new Intent(AddService.this,AdminOptions.class); //Start intent basically means to start a new ACTIVITY
                     startActivity(backTrack);
                 }
                 else if (prevClass.equals("AdminServices")){
@@ -47,6 +49,8 @@ public class AddService extends AppCompatActivity {
             }
         });
 
+
+        //create a listener for the save button
         save.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
@@ -63,8 +67,8 @@ public class AddService extends AppCompatActivity {
 
                         //add Service in DB
                         //////////////////////////////
-                        DatabaseReference dr = FirebaseDatabase.getInstance().getReference("Service").child("Service");
-                        Database db = new Database(dr,AddService.this,getApplicationContext());
+                        DatabaseReference dr = FirebaseDatabase.getInstance().getReference("Service").child("Service"); //Create a database reference to a point in Firebase
+                        Database db = new Database(dr,AddService.this,getApplicationContext()); //Setup a database object
                         db.addService(nameField.getText().toString(),rateField.getText().toString(),infoField.getText().toString());
 
                         if(prevClass.equals("AdminOptions")){
