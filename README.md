@@ -1,8 +1,7 @@
 # HomeFix
 
 Build Status
-[![Build Status](https://circleci.com/gh/FaizChishtie/HomeFix.png?branch=master)]
-(https://circleci.com/gh/FaizChishtie/HomeFix)
+[![Build Status](https://circleci.com/gh/FaizChishtie/HomeFix.png?branch=master)](https://circleci.com/gh/FaizChishtie/HomeFix)
 
 swapp
 
