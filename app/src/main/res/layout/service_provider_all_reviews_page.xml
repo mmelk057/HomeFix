@@ -44,7 +44,6 @@
         android:layout_width="324dp"
         android:layout_height="463dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/service_provider_reviews_page_top_label"
-        android:layout_marginBottom="83dp" />
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
