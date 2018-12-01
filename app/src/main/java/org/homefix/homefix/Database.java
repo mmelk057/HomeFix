@@ -326,9 +326,9 @@ public class Database extends AppCompatActivity {
 
                     // If the user is not a null object, that means authentication worked!
                     if (type.equals("HomeOwner")) {
-                        Intent toWelcomePage = new Intent(activity,Welcome.class);
-                        toWelcomePage.putExtra("user",email);
-                        activity.startActivity(toWelcomePage);
+                        Intent toUserMainScreen = new Intent(activity,UserMainScreen.class);
+                        toUserMainScreen.putExtra("user",email);
+                        activity.startActivity(toUserMainScreen);
                         //UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder().setDisplayName(type).build(); // DISPLAY NAME IS TYPE.build();
                     }
                     else if(type.equals("ServiceProvider")){
@@ -547,6 +547,50 @@ public class Database extends AppCompatActivity {
 
     }
 
+    /**
+     * Lists all service objects in the database onto a ListView Object (Intended for AdminServices.java)
+     * this is a modified version of listServices() that is tailored for the UserMainScreen activity
+     * @param listViewId reference to the Listview object to which you would want the information to be stored on
+     * @param email reference to the user email that will be passed on to the UserServiceProvider activity
+     */
+    public void listServicesForUser(final int listViewId, final String email){
+        DatabaseReference dR = firebaseReference;
+        dR.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) { //Goes through all the services under Swapp>>Service>>Service  database reference
+                ArrayList<ServiceCategory> services = new ArrayList<>(); //array list of all ServiceCategory objects
+                for(DataSnapshot service: dataSnapshot.getChildren()){
+                    String info = (String)service.child("info").getValue(); //Gets the value of the info variable of a service
+                    String name = (String)service.child("name").getValue(); //Gets the value of the name variable of a service
+                    String rate = Long.toString((long)service.child("rate").getValue()); //Gets the value of the rate variable of a service
+                    if (info!=null && name!= null && rate != null) {
+                        ServiceCategory s = new ServiceCategory(name,Double.parseDouble(rate),info); //create a new Service Provider object with all the retrieved information
+                        services.add(s); //add new service provider object to the arraylist
+                    }
+                }
+                ServiceListAdapter adapt = new ServiceListAdapter(currentContext,R.layout.service_list_layout,services); // Instantiate a new custom adapter object (Check class for further information)
+                ListView serviceList = activity.findViewById(listViewId); //Create a listview object with the id specified in the param (it's pointing to the listview in an activity)
+                serviceList.setAdapter(adapt); //Set the adapter to the listview
+                //Create a listener for the listview object
+                serviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        //IF AN ITEM IS CLICKED, IT WILL RETRIEVE THE TAG BEHIND THE LISTVIEW OBJECT and pair it with the intent as an "extra"
+                        Intent toUserServiceProvider = new Intent(activity,UserServiceProvider.class); //creates a new intent
+                        toUserServiceProvider.putExtra("user", email); //gets the email of the user value and puts it as an extra
+                        activity.startActivity(toUserServiceProvider); //starts a new activity based on the intent created
+                    }
+                });
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("Firebase_Error", "onCancelled: "+databaseError.getDetails());
+            }
+        });
+
+    }
 
     public void listAllOfferedServices(final int listViewId,final String email){
         DatabaseReference dR = firebaseReference;

@@ -2,7 +2,8 @@ package org.homefix.homefix;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.ImageButton;
+import android.view.View;
+import android.widget.RelativeLayout;
 
 public class all_current_bookings extends AppCompatActivity {
 
@@ -10,6 +11,5 @@ public class all_current_bookings extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.all_current_bookings);
-
     }
 }
