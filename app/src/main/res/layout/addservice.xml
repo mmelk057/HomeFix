@@ -51,7 +51,7 @@
 
     <!--xml title-->
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/User_Email"
         android:layout_width="176dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -74,7 +74,7 @@
         android:layout_width="wrap_content"
         android:layout_height="197dp"
         android:layout_above="@+id/saveButton"
-        android:layout_below="@+id/textView2"
+        android:layout_below="@+id/User_Email"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentEnd="true"

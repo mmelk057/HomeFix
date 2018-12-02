@@ -46,8 +46,12 @@ public class Database extends AppCompatActivity {
     private ArrayList<String> allActivities;
     private int allActivitiesLength;
 
-
-    // CONSTRUCTOR WHEN USING SERVICE
+    /***
+     * Constructor
+     * @param firebaseReference Firebase reference to a specific node in the Database (ex. Swapp>>Users>>ListOfUsers)
+     * @param activity Current activity (ex. [Activity_Name].this)
+     * @param currentContext Context of current activity (ex. getBaseContext() or getApplicationContext())
+     */
     public Database(DatabaseReference firebaseReference, Activity activity, Context currentContext){
         this.firebaseReference = firebaseReference;
         this.activity = activity;
@@ -55,20 +59,28 @@ public class Database extends AppCompatActivity {
         didAuth = false;
     }
 
+    //DONT WORRY ABOUT THIS CONSTRUCTOR
     public Database(DatabaseReference firebaseReference) {
         this.firebaseReference=firebaseReference;
         allActivitiesLength=0;
     }
 
+    //DONT WORRY ANOUT THIS METHOD
     public boolean getDidAuth(){
         return getDidAuth();
     }
 
-
+    //DONT WORRY ABOUT THIS METHOD
     public void setDidAuth(boolean auth){
         didAuth=auth;
     }
 
+    /**
+     * Validating if two String fields are identical
+     * @param pass1 Password String no.1
+     * @param pass2 Password String no.2
+     * @return boolean on whether the two parameter Strings are equal
+     */
     public boolean validatePassword(String pass1, String pass2){
         if(!pass1.equals(pass2)){
             return false;
@@ -102,10 +114,10 @@ public class Database extends AppCompatActivity {
         }
         //Add Service Provider User
         else {
-            String id = firebaseReference.push().getKey();
-            ServiceProvider sp = new ServiceProvider(username);
-            firebaseReference.child("ServiceProvider").child(id).setValue(sp);
-            firebaseReference.child("ServiceProvider").child(id).child("Availability").push().child("Time").setValue("");
+            String id = firebaseReference.push().getKey(); //Generate a random key from FireBase(ex. fyu]iwreyiu33737) then using getKey(), retrieves that newly created key
+            ServiceProvider sp = new ServiceProvider(username); //Create a service provider object
+            firebaseReference.child("ServiceProvider").child(id).setValue(sp); //Send the service provider object to firebase (IT will translate all the global variables within the class and their values to <Key,Value> pairs)
+            firebaseReference.child("ServiceProvider").child(id).child("Availability").push().child("Time").setValue(""); // Sets a specific value for a child
             String bookingId = firebaseReference.child("ServiceProvider").child(id).child("CurrentBookings").push().getKey();
             firebaseReference.child("ServiceProvider").child(id).child("CurrentBookings").child(bookingId).child("Name").setValue("");
             firebaseReference.child("ServiceProvider").child(id).child("CurrentBookings").child(bookingId).child("Time").setValue("");
@@ -151,6 +163,7 @@ public class Database extends AppCompatActivity {
         });
     }
 
+    //DONT WORRY ABOUT THIS METHOD // UNIMPORTANT!!
     public String addToActivities(String input){
         allActivitiesLength+=1;
         String activitiesInput = input+":Activity"+allActivitiesLength;
@@ -164,10 +177,10 @@ public class Database extends AppCompatActivity {
      * @param time availability that is to be added
      */
     public void addAvailability(final String guid,final String time){
-        final DatabaseReference dR = firebaseReference.child(guid).child("Availability");
+        final DatabaseReference dR = firebaseReference.child(guid).child("Availability"); //Since the parameter's a GUID, no need to search for a user. A user's already specified!
         dR.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {  //Queries through all Time values within a SPECIFIED USER'S availabilities directory
                 boolean isAlreadyInList = false;
                 for(DataSnapshot currentElem: dataSnapshot.getChildren()){
                     if ((currentElem.child("Time").getValue()).equals(time)) {
@@ -175,7 +188,7 @@ public class Database extends AppCompatActivity {
                          break;
                     }
                 }
-                if (!isAlreadyInList){
+                if (!isAlreadyInList){ //Makes sure that the availability is not already in the directory in Firebase!
                     firebaseReference.child(guid).child("Availability").push().child("Time").setValue(time);
                 }
                 dR.removeEventListener(this);
@@ -198,12 +211,12 @@ public class Database extends AppCompatActivity {
     public void findUserAndListAvailablities(final int listViewId,final String email){
         firebaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) { //Starts by searching for a user
                 for (DataSnapshot user:dataSnapshot.getChildren()){
                     String tempUser = (String)user.child("email").getValue();
                     try {
-                        if (tempUser.equals(email)) {
-                            listAvailabilities(listViewId,user.getKey());
+                        if (tempUser.equals(email)) { //Checks to see if the user is found
+                            listAvailabilities(listViewId,user.getKey()); //If the user is found, call a secondary method BELOW
                             break;
                         }
                     }
@@ -229,24 +242,25 @@ public class Database extends AppCompatActivity {
      * @param guid global unique identifier
      */
     public void listAvailabilities(final int listViewId,final String guid){
-        final DatabaseReference dR = firebaseReference.child(guid).child("Availability");
+        final DatabaseReference dR = firebaseReference.child(guid).child("Availability"); //The GUID parameter means that the user is already specified. This is a Secondary method
         dR.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ArrayList<String> availabilities = new ArrayList<>();
-                for(DataSnapshot currentElem: dataSnapshot.getChildren()){
+                ArrayList<String> availabilities = new ArrayList<>(); //create a local arraylist full of availabilities
+                for(DataSnapshot currentElem: dataSnapshot.getChildren()){ //Collects all the availability values under a specified user
                     if (!((String)currentElem.child("Time").getValue()).equals("")) {
                         availabilities.add((String) currentElem.child("Time").getValue());
                     }
                 }
-                AvailabilityListAdapter adapt = new AvailabilityListAdapter(currentContext,R.layout.simple_drop_list_layout,availabilities);
-                ListView serviceList = activity.findViewById(listViewId);
-                serviceList.setAdapter(adapt);
+                AvailabilityListAdapter adapt = new AvailabilityListAdapter(currentContext,R.layout.simple_drop_list_layout,availabilities); //Creates a custom adapter object
+                ListView serviceList = activity.findViewById(listViewId);//Create a listview object with the PARAMETER ID to point to the listview in the activity
+                serviceList.setAdapter(adapt); //Set the adapter to the list view
+                //Set a listnener so that whenever an object is clicked inside the listview, it reacts
                 serviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         String time = (String)view.getTag();
-                        findAndDeleteAvailability(time,guid);
+                        findAndDeleteAvailability(time,guid); //if an oject is clicked it will retreieve the tag of that listview object and delete it from the Firebase DB
                     }
                 });
 
@@ -259,15 +273,19 @@ public class Database extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Deletes an availiability from a specific user's directory
+     * @param time Time that is to be deleted
+     * @param guid Global unique identifier
+     */
     public void findAndDeleteAvailability(final String time, final String guid){
         final DatabaseReference dR = FirebaseDatabase.getInstance().getReference("User").child("ServiceProvider").child(guid).child("Availability");
         dR.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) { //Goes through all availabilities of a user
                 for(DataSnapshot timeEntries: dataSnapshot.getChildren()){
-                    if(((String)timeEntries.child("Time").getValue()).equals(time)){
-                        deleteAvailability(guid,timeEntries.getKey());
+                    if(((String)timeEntries.child("Time").getValue()).equals(time)){ //If it finds an availability, it will delete it
+                        deleteAvailability(guid,timeEntries.getKey()); // Calls a secondary method to delete the entire entry of the availability
                         break;
                     }
                 }
@@ -281,6 +299,11 @@ public class Database extends AppCompatActivity {
         });
     }
 
+    /**
+     * Deletes an entry given the user's guid and the availability object's guid in Firebase
+     * @param guid global unique identifier of the user
+     * @param guidV2 global unique identifier of the availability
+     */
     public void deleteAvailability(String guid,String guidV2){
         FirebaseDatabase.getInstance().getReference("User").child("ServiceProvider").child(guid).child("Availability").child(guidV2).removeValue();
     }
@@ -486,29 +509,31 @@ public class Database extends AppCompatActivity {
         DatabaseReference dR = firebaseReference;
         dR.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ArrayList<ServiceCategory> services = new ArrayList<>();
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) { //Goes through all the services under Swapp>>Service>>Service  database reference
+                ArrayList<ServiceCategory> services = new ArrayList<>(); //array list of all ServiceCategory objects
                 for(DataSnapshot service: dataSnapshot.getChildren()){
-                    String info = (String)service.child("info").getValue();
-                    String name = (String)service.child("name").getValue();
-                    String rate = Long.toString((long)service.child("rate").getValue());
+                    String info = (String)service.child("info").getValue(); //Gets the value of the info variable of a service
+                    String name = (String)service.child("name").getValue(); //Gets the value of the name variable of a service
+                    String rate = Long.toString((long)service.child("rate").getValue()); //Gets the value of the rate variable of a service
                     if (info!=null && name!= null && rate != null) {
-                        ServiceCategory s = new ServiceCategory(name,Double.parseDouble(rate),info);
-                        services.add(s);
+                        ServiceCategory s = new ServiceCategory(name,Double.parseDouble(rate),info); //create a new Service Provider object with all the retrieved information
+                        services.add(s); //add new service provider object to the arraylist
                     }
                 }
-                ServiceListAdapter adapt = new ServiceListAdapter(currentContext,R.layout.service_list_layout,services);
-                ListView serviceList = activity.findViewById(listViewId);
-                serviceList.setAdapter(adapt);
+                ServiceListAdapter adapt = new ServiceListAdapter(currentContext,R.layout.service_list_layout,services); // Instantiate a new custom adapter object (Check class for further information)
+                ListView serviceList = activity.findViewById(listViewId); //Create a listview object with the id specified in the param (it's pointing to the listview in an activity)
+                serviceList.setAdapter(adapt); //Set the adapter to the listview
+                //Create a listener for the listview object
                 serviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent toServiceInfo = new Intent(activity,ServiceInfo.class);
-                        ServiceCategory sc = (ServiceCategory) view.getTag();
-                        toServiceInfo.putExtra("name",sc.getName());
-                        toServiceInfo.putExtra("rate",String.valueOf(sc.getRate()));
-                        toServiceInfo.putExtra("info",sc.getInfo());
-                        activity.startActivity(toServiceInfo);
+                        //IF AN ITEM IS CLICKED, IT WILL RETRIEVE THE TAG BEHIND THE LISTVIEW OBJECT and pair it with the intent as an "extra"
+                        Intent toServiceInfo = new Intent(activity,ServiceInfo.class); //creates a new intent
+                        ServiceCategory sc = (ServiceCategory) view.getTag(); //gets tag
+                        toServiceInfo.putExtra("name",sc.getName()); //gets the name value of the tag and puts it as an extra
+                        toServiceInfo.putExtra("rate",String.valueOf(sc.getRate())); //gets the rate value of the tag and puts it as an extra
+                        toServiceInfo.putExtra("info",sc.getInfo()); //gets the info value of the tag and puts it as an extra
+                        activity.startActivity(toServiceInfo); //starts a new activity based on the intent created
                     }
                 });
 

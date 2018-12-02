@@ -49,10 +49,11 @@
     <ListView
         android:id="@+id/all_available_times"
         android:layout_width="match_parent"
-        android:layout_height="367dp"
+        android:layout_height="257dp"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"/>
+        android:layout_marginBottom="110dp" />
 
     <TextView
         android:id="@+id/current_times_txt"
@@ -64,4 +65,15 @@
         android:text="@string/times"
         android:gravity="center_vertical"
         android:textStyle="italic|bold" />
+
+    <Button
+        android:id="@+id/service_provider_to_reviews_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="32dp"
+        android:text="Reviews"
+        android:textColor="@color/beige"
+        android:backgroundTint="@color/design_default_color_primary"/>
 </RelativeLayout>
