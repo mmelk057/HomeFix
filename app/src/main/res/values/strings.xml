@@ -45,5 +45,9 @@
     <string name="Current_bookings_back">TODO</string>
     <string name="service_name_insert_here">[SERVICE NAME INSERT HERE]</string>
     <string name="HomeOwnerServiceProviderBackButton">TODO</string>
+    <string name="service_providers">Service Providers</string>
+    <string name="review">Review</string>
+    <string name="date">Date</string>
+    <string name="company_name">Company Name:</string>
 
 </resources>

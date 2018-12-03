@@ -34,7 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+import org.homefix.homefix.UserServiceProvider.UserServiceListAdapter;
 import com.google.firebase.database.DatabaseReference;
 
 public class Database extends AppCompatActivity {
@@ -803,6 +803,60 @@ public class Database extends AppCompatActivity {
         }
 
 
+
+    }
+    public void listServiceandRating (final int listViewId){
+        final DatabaseReference dr = FirebaseDatabase.getInstance().getReference("User").child("ServiceProvider");
+        dr.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<ServiceProvider> elements = new ArrayList<>();
+                for (DataSnapshot element: dataSnapshot.getChildren()){
+                   String CompanyName =(String)element.child("companyName").getValue();
+                   String Rating = (String)element.child("Rating").getValue();
+                   String email = (String)element.child("email").getValue();
+                   if (email!=null) {
+                       ServiceProvider s = new ServiceProvider(email); //create a new Service Provider object with all the retrieved information
+                       if (CompanyName!=null){
+                           s.setCompanyName(CompanyName);
+                       }
+                       if(Rating!=null){
+                           s.setRating(Rating);
+                       }
+                       elements.add(s);
+                    }
+                }
+                UserServiceProvider USP = new UserServiceProvider();
+                UserServiceProvider.UserServiceListAdapter adapter = USP.new UserServiceListAdapter(currentContext,R.layout.homeowner_service_provider_list_item_layout,elements,activity);
+                ListView ServiceANDRating = activity.findViewById(listViewId);
+                //ServiceANDRating.
+                ServiceANDRating.setAdapter(adapter);
+                ServiceANDRating.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent UserServieProvide = new Intent(activity,UserServiceProvider.class); //creates a new intent
+                        ServiceProvider sc = (ServiceProvider) view.getTag(); //gets tag
+                        UserServieProvide.putExtra("companyName",sc.getCompanyName()); //gets the name value of the tag and puts it as an extra
+                        UserServieProvide.putExtra("Rating",String.valueOf(sc.getRating())); //gets the rate value of the tag and puts it as an extra
+                        UserServieProvide.putExtra("email",sc.getEmail()); //gets the info value of the tag and puts it as an extra
+                        activity.startActivity(UserServieProvide); //starts a new activity based on the intent created
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("Firebase_Error", "onCancelled: "+databaseError.getDetails());
+
+            }
+        }
+
+
+
+
+        );
 
     }
 

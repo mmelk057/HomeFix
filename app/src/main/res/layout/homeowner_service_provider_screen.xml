@@ -26,15 +26,15 @@
         android:contentDescription="@string/HomeOwnerServiceProviderBackButton" />
 
     <ListView
-        android:id="@+id/homeOwnerServiceProviderListView"
+        android:id="@+id/homeowner_service_providerlv"
         android:layout_width="305dp"
         android:layout_height="348dp"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginBottom="38dp"
+        android:layout_alignParentBottom="true"
         android:layout_marginStart="42dp"
-        android:layout_marginLeft="42dp"/>
+        android:layout_marginLeft="42dp"
+        android:layout_marginBottom="38dp" />
 
     <TextView
         android:id="@+id/serviceNameTitle"
@@ -46,8 +46,8 @@
         android:layout_marginStart="88dp"
         android:layout_marginLeft="88dp"
         android:layout_marginTop="54dp"
-        android:text="@string/service_name_insert_here"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textAlignment="center"/>
+        android:text="@string/service_providers"
+        android:textAlignment="center"
+        android:textSize="23sp"
+        android:textStyle="bold" />
 </RelativeLayout>
