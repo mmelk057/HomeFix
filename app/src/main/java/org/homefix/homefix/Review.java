@@ -19,13 +19,20 @@ import com.google.firebase.database.ValueEventListener;
 
 public class Review {
     private String email;
-    private String review;
+    private String rating;
     private String comment;
 
-    public Service(String email, String review,String comment) {
+    public Review(String email, String rating,String comment) {
         this.email = email;
-        this.review = review;
+        this.rating = rating;
         this.comment = comment;
     }
+
+    public String getEmail (){ return email;}
+    public String getRating (){ return rating;}
+    public String getComment (){ return comment;}
+
+
+
 
 }

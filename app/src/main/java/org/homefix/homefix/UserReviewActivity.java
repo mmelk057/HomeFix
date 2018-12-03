@@ -2,29 +2,76 @@ package org.homefix.homefix;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.Toast;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 public class UserReviewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_write_a_review);
+        setContentView(R.layout.activity_write__a__review);
 
         //Get previous intent extras
         final Intent previousIntent = getIntent();
 
         //Create all Edit Text objects
-        EditText emailField,ratingField,commentField;
-        emailField = findViewById(R.id.modify_User_Email); //MAKE SURE NAMES CORRELATE WITH XML Id's
+        final EditText emailField,ratingField,commentField;
+        emailField = findViewById(R.id.user_email); //MAKE SURE NAMES CORRELATE WITH XML Id's
         if (previousIntent.getStringExtra("Email")!=null){
             emailField.setHint(previousIntent.getStringExtra("Email"));
         }
-        ratingField = findViewById(R.id.modify_Review_rating);
+        ratingField = findViewById(R.id.rating);
         if(previousIntent.getStringExtra("Rating")!=null){
             ratingField.setHint(previousIntent.getStringExtra("Rating"));
         }
-        commentField = findViewById(R.id.modify_Review);
+        commentField = findViewById(R.id.comment);
         if(previousIntent.getStringExtra("Comment")!=null){
-            numberField.setHint(previousIntent.getStringExtra("Comment"));
+            commentField.setHint(previousIntent.getStringExtra("Comment"));
         }
 
         //Database Reference
@@ -33,7 +80,7 @@ public class UserReviewActivity extends AppCompatActivity {
 
         //Create all Button objects
         ImageButton backButton = findViewById(R.id.review_Backbutton); //ADD BUTTONS TO XML
-        Button saveButton = findViewById(R.id.review_save_button);
+        Button saveButton = findViewById(R.id.review_saveButton);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,18 +99,21 @@ public class UserReviewActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Integer.parseInt(ratingField.getText().toString())=<5 || Integer.parseInt(ratingField.getText().toString()>=0)==false){
-                    Toast.makeText(currentContext, "Please enter a whole number from 0 to 5", Toast.LENGTH_LONG).show();
+                int ratingInt = Integer.parseInt(ratingField.getText().toString());
+                if (ratingInt>5 || ratingInt<0){
+                    Toast.makeText(UserReviewActivity.this, "Please enter a whole number from 0 to 5", Toast.LENGTH_LONG).show();
                 }
-                if (Integer.parseInt(ratingField.getText().toString())=<5 && Integer.parseInt(ratingField.getText().toString()) >=0){
-                    Toast.makeText(currentContext, "Review Added", Toast.LENGTH_LONG).show();
-                    serviceProviderDirectory.addReview(emailField,ratingField,commentField);
+                if ((ratingInt<=5) && (ratingInt>=0)){
+                    Toast.makeText(UserReviewActivity.this, "Review Added", Toast.LENGTH_LONG).show();
+                    serviceProviderDirectory.addReview(emailField.toString(),ratingField.toString(),commentField.toString());
                 }
 
             }
 
         });
     };
+
+
 }
 
 
