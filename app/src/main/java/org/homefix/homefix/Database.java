@@ -592,6 +592,47 @@ public class Database extends AppCompatActivity {
 
     }
 
+    public void listServicesSearch(final int listViewId, final String email,final String searched){
+        final DatabaseReference dR = FirebaseDatabase.getInstance().getReference("Service").child("Service");
+        dR.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) { //Goes through all the services under Swapp>>Service>>Service  database reference
+                ArrayList<ServiceCategory> services = new ArrayList<>(); //array list of all ServiceCategory objects
+                for(DataSnapshot service: dataSnapshot.getChildren()){
+                    String info = (String)service.child("info").getValue(); //Gets the value of the info variable of a service
+                    String name = (String)service.child("name").getValue(); //Gets the value of the name variable of a service
+                    String rate = Long.toString((long)service.child("rate").getValue()); //Gets the value of the rate variable of a service
+                    if (info!=null && name!= null && rate != null) {
+                        if (name.equalsIgnoreCase(searched)){ //if the name is equal then it's added to the listview
+                            ServiceCategory s = new ServiceCategory(name,Double.parseDouble(rate),info); //create a new Service Provider object with all the retrieved information
+                            services.add(s); //add new service provider object to the arraylist
+                        }
+                    }
+                }
+                ServiceListAdapter adapt = new ServiceListAdapter(currentContext,R.layout.service_list_layout,services); // Instantiate a new custom adapter object (Check class for further information)
+                ListView serviceList = activity.findViewById(listViewId); //Create a listview object with the id specified in the param (it's pointing to the listview in an activity)
+                serviceList.setAdapter(adapt); //Set the adapter to the listview
+                //Create a listener for the listview object
+                serviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    }
+                });
+
+                dR.removeEventListener(this);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("Firebase_Error", "onCancelled: "+databaseError.getDetails());
+            }
+        });
+
+    }
+
+
     public void listAllOfferedServices(final int listViewId,final String email){
         DatabaseReference dR = firebaseReference;
         dR.addValueEventListener(new ValueEventListener() {

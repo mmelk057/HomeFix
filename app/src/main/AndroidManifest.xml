@@ -64,8 +64,6 @@
             android:exported="true"></activity>
         <activity android:name=".Welcome"
             android:exported="true"></activity>
-        <activity android:name=".UserServiceProvider"
-            android:exported="true"></activity>
     </application>
 
 </manifest>

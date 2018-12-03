@@ -29,12 +29,12 @@
     <LinearLayout
         android:layout_width="360dp"
         android:layout_height="450dp"
+        android:layout_below="@+id/searchbar"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
         android:layout_marginStart="22dp"
         android:layout_marginLeft="22dp"
-        android:layout_marginTop="127dp"
+        android:layout_marginTop="34dp"
         android:orientation="vertical">
 
         <ListView
@@ -58,5 +58,31 @@
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:textSize="18sp"
         app:fontFamily="@font/x" />
+
+    <EditText
+        android:id="@+id/searchbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Offered_Services"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Search"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/searchbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Offered_Services"
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/searchbar"
+        android:layout_toRightOf="@id/searchbar"
+        android:text="Search" />
 
 </RelativeLayout>
