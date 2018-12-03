@@ -169,6 +169,58 @@ public class Database extends AppCompatActivity {
         });
     }
 
+    public void findUserAndListAvailablitiesForUser(final int listViewId,final String email){
+        firebaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) { //Starts by searching for a user
+                for (DataSnapshot user:dataSnapshot.getChildren()){
+                    String tempUser = (String)user.child("email").getValue();
+                    try {
+                        if (tempUser.equals(email)) { //Checks to see if the user is found
+                            listAvailabilitiesForUser(listViewId,user.getKey()); //If the user is found, call a secondary method BELOW
+                            break;
+                        }
+                    }
+                    catch(NullPointerException e){
+                        continue;
+                    }
+                }
+                firebaseReference.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("Firebase_Error", "onCancelled: "+databaseError.getDetails());
+            }
+        });
+    }
+
+    public void listAvailabilitiesForUser(final int listViewId,final String guid){
+        final DatabaseReference dR = firebaseReference.child(guid).child("Availability"); //The GUID parameter means that the user is already specified. This is a Secondary method
+        dR.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<String> availabilities = new ArrayList<>(); //create a local arraylist full of availabilities
+                for(DataSnapshot currentElem: dataSnapshot.getChildren()){ //Collects all the availability values under a specified user
+                    if (!((String)currentElem.child("Time").getValue()).equals("")) {
+                        availabilities.add((String) currentElem.child("Time").getValue());
+                    }
+                }
+                AvailabilityListAdapter adapt = new AvailabilityListAdapter(currentContext,R.layout.simple_drop_list_layout,availabilities); //Creates a custom adapter object
+                ListView serviceList = activity.findViewById(listViewId);//Create a listview object with the PARAMETER ID to point to the listview in the activity
+                serviceList.setAdapter(adapt); //Set the adapter to the list view
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("Firebase_Error", "onCancelled: "+databaseError.getDetails());
+            }
+        });
+    }
+
+
+
     //DONT WORRY ABOUT THIS METHOD // UNIMPORTANT!!
     public String addToActivities(String input){
         allActivitiesLength+=1;
