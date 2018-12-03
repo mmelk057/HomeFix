@@ -62,6 +62,14 @@
         <activity android:name=".Write_A_Review" />
         <activity android:name=".All_Availabilities" />
         <activity android:name=".all_current_bookings"></activity>
+        <activity android:name=".UserServiceProvider"
+            android:exported="true"></activity>
+        <activity android:name=".UserMainScreen"
+            android:exported="true"></activity>
+        <activity android:name=".UserReviewActivity"
+            android:exported="true"></activity>
+        <activity android:name=".UserAvailabilitiesActivity"
+            android:exported="true"></activity>
     </application>
 
 </manifest>

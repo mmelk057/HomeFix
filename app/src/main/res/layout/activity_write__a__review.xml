@@ -73,7 +73,7 @@
         app:fontFamily="@font/x" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/review_saveButton"
         android:layout_width="105dp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -107,6 +107,7 @@
         android:autofillHints="" />
 
     <EditText
+        android:id="@+id/rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/Review_Rating"
@@ -123,7 +124,7 @@
         android:autofillHints="" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/comment"
         android:layout_width="363dp"
         android:layout_height="102dp"
         android:layout_alignParentStart="true"

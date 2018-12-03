@@ -3,13 +3,13 @@ package org.homefix.homefix;
 import java.util.ArrayList;
 
 public class ServiceProvider {
-    private String email,companyName,companyAddress,companyPhoneNumber,companyDescription;
+    private String email,companyName,companyAddress,companyPhoneNumber,companyDescription,Rating;
     private boolean isLiscenced;
     private ArrayList<String> Availabilities,Ratings,Bookings;
 
     public ServiceProvider(String email){
         this.email=email;
-        this.companyName=this.companyAddress=this.companyPhoneNumber=this.companyDescription="";
+        this.companyName=this.companyAddress=this.companyPhoneNumber=this.companyDescription=this.Rating="";
         this.isLiscenced=false;
         Availabilities=Ratings=Bookings= new ArrayList<>();
 
@@ -19,7 +19,7 @@ public class ServiceProvider {
         return email;
     }
 
-
+    public String getRating() {return Rating;}
 
     public String getCompanyName() {
         return companyName;
@@ -56,6 +56,7 @@ public class ServiceProvider {
     public void setEmail(String email) {
         this.email = email;
     }
+    public void setRating(String Rating){this.Rating=Rating;}
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;

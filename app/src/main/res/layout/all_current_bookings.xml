@@ -8,15 +8,33 @@
     android:background="@color/beige">
 
 
-    <LinearLayout
-        android:layout_width="360dp"
-        android:layout_height="450dp"
+    <Button
+        android:id="@+id/signOutButton2"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="99dp"
+        android:layout_height="52dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="251dp"
+        android:layout_marginLeft="251dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:fontFamily="@font/x"
+        android:text="@string/sign_out" />
+
+    <LinearLayout
+        android:layout_width="360dp"
+        android:layout_height="450dp"
+        android:layout_below="@+id/searchbar"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_marginStart="22dp"
         android:layout_marginLeft="22dp"
-        android:layout_marginTop="127dp"
+        android:layout_marginTop="34dp"
         android:orientation="vertical">
 
         <ListView
@@ -35,28 +53,36 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="50dp"
         android:layout_marginLeft="50dp"
-        android:layout_marginTop="69dp"
+        android:layout_marginTop="86dp"
         android:text="@string/list_of_currently_offered_services"
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:textSize="18sp"
         app:fontFamily="@font/x" />
 
-    <ImageButton
-        android:id="@+id/current_bookings_back"
-        style="@style/Widget.AppCompat.ImageButton"
-        android:layout_width="65dp"
-        android:layout_height="42dp"
+    <EditText
+        android:id="@+id/searchbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Offered_Services"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="5dp"
-        android:adjustViewBounds="false"
-        android:background="#FFF0c7"
-        android:cropToPadding="false"
-        app:srcCompat="?attr/actionModeCloseDrawable"
-        tools:srcCompat="?attr/homeAsUpIndicator"
-        android:contentDescription="@string/Current_bookings_back" />
+        android:layout_marginStart="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Search"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/searchbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Offered_Services"
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/searchbar"
+        android:layout_toRightOf="@id/searchbar"
+        android:text="Search" />
 
 </RelativeLayout>
