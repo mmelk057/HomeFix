@@ -35,6 +35,9 @@ public class UserServiceProvider extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.homeowner_service_provider_screen);
 
+        Intent previousIntent = getIntent();
+        final String email = previousIntent.getStringExtra("user"); //email of current user
+
         DatabaseReference dr = FirebaseDatabase.getInstance().getReference("User").child("ServiceProvider");
         Database serviceDB = new Database(dr,UserServiceProvider.this,getApplicationContext());
         serviceDB.listServiceandRating(R.id.homeowner_service_providerlv);
@@ -81,7 +84,7 @@ public class UserServiceProvider extends AppCompatActivity {
             LayoutInflater convertToView= LayoutInflater.from(context);
             View newView = convertToView.inflate(resource,parent,false);
 
-            TextView ServiceProviderName = (TextView) newView.findViewById(R.id.company_name_2);
+            final TextView ServiceProviderName = (TextView) newView.findViewById(R.id.company_name_2);
             TextView Rating = (TextView) newView.findViewById(R.id.company_rating_2);
             Button Review = (Button) newView.findViewById(R.id.Review);
             Button Date = (Button)newView.findViewById(R.id.Date);
@@ -93,6 +96,7 @@ public class UserServiceProvider extends AppCompatActivity {
                 public void onClick(View v) {
                     //Toast.makeText(getContext(),"Button was cicked " +position, Toast.LENGTH_SHORT);
                     Intent writeReview =new Intent(context, UserReviewActivity.class);
+                    writeReview.putExtra("companyName", ServiceProviderName.getText().toString());
                     activity.startActivity(writeReview);
                 }
            });

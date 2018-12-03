@@ -75,7 +75,7 @@ public class UserReviewActivity extends AppCompatActivity {
         }
 
         //Database Reference
-        DatabaseReference firebaseRef = FirebaseDatabase.getInstance().getReference("User").child("ServiceProvider").child("Reviews"));
+        DatabaseReference firebaseRef = FirebaseDatabase.getInstance().getReference("User").child("ServiceProvider").child("Reviews");
         final Database serviceProviderDirectory = new Database(firebaseRef,UserReviewActivity.this,getApplicationContext());
 
         //Create all Button objects
@@ -105,7 +105,7 @@ public class UserReviewActivity extends AppCompatActivity {
                 }
                 if ((ratingInt<=5) && (ratingInt>=0)){
                     Toast.makeText(UserReviewActivity.this, "Review Added", Toast.LENGTH_LONG).show();
-                    serviceProviderDirectory.addReview(emailField.toString(),ratingField.toString(),commentField.toString());
+                    serviceProviderDirectory.addReview(emailField.getText().toString().trim(),ratingField.getText().toString().trim(),commentField.getText().toString().trim());
                 }
 
             }
@@ -117,5 +117,5 @@ public class UserReviewActivity extends AppCompatActivity {
 }
 
 
-}
+
 

@@ -622,7 +622,10 @@ public class Database extends AppCompatActivity {
                 serviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                        //IF AN ITEM IS CLICKED, IT WILL RETRIEVE THE TAG BEHIND THE LISTVIEW OBJECT and pair it with the intent as an "extra"
+                        Intent toUserServiceProvider = new Intent(activity,UserServiceProvider.class); //creates a new intent
+                        toUserServiceProvider.putExtra("user", email); //gets the email of the user value and puts it as an extra
+                        activity.startActivity(toUserServiceProvider); //starts a new activity based on the intent created
                     }
                 });
 
