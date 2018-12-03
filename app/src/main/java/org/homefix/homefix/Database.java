@@ -100,6 +100,12 @@ public class Database extends AppCompatActivity {
         Toast.makeText(currentContext, "Service added", Toast.LENGTH_LONG).show();
     }
 
+    public void addReview(String email, String rating, String comment){
+        String id = firebaseReference.push().getKey();
+        Review review = new Review(email,rating,comment);
+        firebaseReference.child(id).setValue(review);
+    }
+
     /**
      * Adds a specific user to the User Firebase Directory
      * @param type A user can be categorized as either a Service Provider, Home Owner or Admin
